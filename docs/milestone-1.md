@@ -70,6 +70,8 @@ Tick each item as soon as it is done and verified. If an item is only partly don
   - the macOS list;
   - GNOME's Adwaita fonts;
   - Android;
+
+  Each entry names its system. Only Linux entries trigger abstentions; Windows, macOS and Android entries only add `preinstalled_on` tags.
   - the LibreOffice bundle.
 - [ ] `foundries.toml` lists League of Moveable Type, Velvetyne, Collletttivo, Open Foundry and Roundo; the designer lists are added if D12 is (a).
 - [ ] `tff-catalog config` prints the effective config and its hash.
@@ -230,8 +232,8 @@ Tick each item as soon as it is done and verified. If an item is only partly don
 **Done when:** no source has an unmatched key in its top 200 (ineligible rows count as resolved), and the known answers pass.
 
 ### Step 10: Confound corrections
-**Who:** Claude; the owner reviews flagged preinstalled entries. **Depends on:** 8, 9.
-- [ ] For the *most chosen* view: reverse-dependency abstentions (at 50% or more), plus abstentions for preinstalled fonts. The *most installed* view keeps every count.
+**Who:** Claude; the owner reviews flagged preinstalled and dependency entries. **Depends on:** 8, 9.
+- [ ] For every rank except *most installed* (most chosen, overall, Coding): reverse-dependency abstentions (at 50% or more), plus abstentions for fonts a Linux system preinstalls. The *most installed* view keeps every count.
 - [ ] `preinstalled_on` and `pulled_in_by` tags for each affected font, used by both views.
 - [ ] Noise floors (Homebrew, the Arch Nerd Fonts group, Nerd release downloads), bundle, Nerd and CJK credits, and exposure counted from data dates.
 - [ ] A per-font correction report, with new cases flagged for the owner.
@@ -260,14 +262,15 @@ Tick each item as soon as it is done and verified. If an item is only partly don
 **Who:** Claude. **Depends on:** 11.
 - [ ] Overall rank with split weights (desktop from *most chosen*), shrunk once.
 - [ ] Views: Desktop *most installed*, Coding, Developers & apps, categories, Rising (beta).
-- [ ] A test that changing any view's weights leaves the overall rank unchanged.
-- [ ] Catalog membership (the top 500 plus each survey's top 100), with hysteresis counters in `state/`.
+- [ ] A test that changing any extra view's weights (Coding, Developers & apps, Rising) leaves the overall rank unchanged.
+- [ ] A leak test: changing a Linux source's count for a font that abstains in *most chosen* leaves the overall rank unchanged.
+- [ ] Catalog membership (the overall top 500 plus the top 100 of the project rank and of both desktop views), with hysteresis counters in `state/`.
 
-**Done when:** every catalog candidate has all the published ranks.
+**Done when:** every catalog candidate has every published rank it has evidence for; fonts unranked in *most chosen* only because of abstentions are listed with their tag.
 
 ### Step 6b: License verification for the catalog (after ranking)
 **Who:** Claude; the owner rules on the queue. **Depends on:** 12; on the critical path before step 13.
-- [ ] L3, for overall rank 700 or better and each survey's top 150:
+- [ ] L3, for overall rank 700 or better and the top 150 of the project rank and both desktop views:
   - fetch the upstream license text and match its fingerprint;
   - check name-table IDs 13 and 14;
   - store text_url, sha256, checked_on and font_version.
@@ -309,7 +312,7 @@ Tick each item as soon as it is done and verified. If an item is only partly don
   - id, family, category, is_monospace;
   - formats, Latin coverage;
   - license {spdx, class, redistributable, attribution_required, text_url};
-  - preview_ok, links, preinstalled_on;
+  - preview_ok, links, preinstalled_on, pulled_in_by;
   - rank or band, `order` and tier for each published rank.
 
   The file also carries the data license and source credits.
@@ -325,7 +328,7 @@ Tick each item as soon as it is done and verified. If an item is only partly don
   - fonts held back by the gate;
   - tier-C fonts;
   - the comparison with the old Top 100;
-  - desktop-versus-project disagreements;
+  - *most chosen*-versus-project disagreements;
   - anomalies;
   - the what-if table.
 - [ ] The owner reviews and edits `ranking.toml`, the aliases or `preinstalled.toml`; Claude reruns (up to 3 rounds).
