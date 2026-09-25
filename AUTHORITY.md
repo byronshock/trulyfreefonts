@@ -6,6 +6,11 @@ This file holds the project's settled decisions. Everything else in the repo fol
 
 Compare the fonts a user already has installed with a ranked list of the most popular free Latin fonts, and show the ones they don't have. The preferred delivery is a web page.
 
+## Releases
+
+1. **Intermediate release: the filterable list.** trulyfreefonts.com first publishes the ranked list of truly free fonts, with filters, but **without** comparing against the fonts a visitor owns. It replaces the current stub. Its purpose is to test usability while the owned-font tools are built and tested. *(2026-09-25)*
+2. **Full release: owned-font comparison.** Tools that take in a visitor's owned-font list and filter owned fonts out of the list. These ship only after the testing they need.
+
 ## Rules
 
 1. **Licenses.** A font qualifies only if its license allows use in **all personal and commercial projects**. A truly free font has **no use restrictions**. Display-only licenses are excluded, and so are personal-use-only, demo/trial and non-commercial licenses. *(2026-09-25)*
@@ -43,7 +48,7 @@ Compare the fonts a user already has installed with a ranked list of the most po
 ## Current step
 
 1. Survey the tools that already exist for this, or for parts of it. *(done 2026-09-25; findings in [docs/prior-art.md](docs/prior-art.md))*
-2. Milestone 1: the ranking methodology proposal and checklist are being drafted. *(2026-09-25)*
+2. Milestone 1, Step 0: the owner reviews the ranking methodology proposal and checklist in [pull request #1](https://github.com/byronshock/trulyfreefonts/pull/1). *(2026-09-25)*
 
 ## Background
 
