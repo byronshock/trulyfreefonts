@@ -1,0 +1,44 @@
+# /etc/caddy/Caddyfile for trulyfreefonts. This copy in ops/ is the source of truth.
+# Deploy: scp ops/Caddyfile tff:/tmp/Caddyfile && ssh tff 'sudo -u caddy caddy validate --config /tmp/Caddyfile --adapter caddyfile && sudo install -m 644 /tmp/Caddyfile /etc/caddy/Caddyfile && sudo systemctl reload caddy'
+# (Validate as the caddy user: validating as root creates root-owned log files that Caddy then can't write.)
+#
+# Cloudflare proxies every hostname and terminates public TLS. Caddy uses the
+# Cloudflare Origin CA certificate (valid to 2041), so it never requests certificates itself.
+
+{
+	servers {
+		# Written by /usr/local/sbin/cloudflare-ips-sync (ops/cloudflare-ips-sync): Cloudflare's ranges.
+		import /etc/caddy/cloudflare-ips.caddy
+		client_ip_headers CF-Connecting-IP
+	}
+}
+
+(origin_tls) {
+	tls /etc/caddy/certs/origin.pem /etc/caddy/certs/origin.key
+}
+
+trulyfreefonts.com {
+	import origin_tls
+	root * /srv/trulyfreefonts/public
+	encode zstd gzip
+	file_server
+
+	header {
+		Strict-Transport-Security "max-age=31536000"
+		X-Content-Type-Options "nosniff"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		X-Frame-Options "SAMEORIGIN"
+		-Server
+	}
+
+	log {
+		output file /var/log/caddy/access.log
+		format json
+	}
+}
+
+# Every other hostname goes to the canonical site, keeping the path and query.
+www.trulyfreefonts.com, trulyfreefonts.org, www.trulyfreefonts.org, trulyfreefonts.net, www.trulyfreefonts.net {
+	import origin_tls
+	redir https://trulyfreefonts.com{uri} permanent
+}

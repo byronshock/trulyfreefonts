@@ -1,0 +1,6 @@
+# Private planning notes; keep out of version control.
+PLAN.md
+.claude/settings.local.json
+
+# Server details kept out of the public repo (origin IPs, VNC console, zone IDs).
+ops/SERVER.local.md

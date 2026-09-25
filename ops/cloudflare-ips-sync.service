@@ -1,0 +1,8 @@
+[Unit]
+Description=Sync ufw and Caddy with Cloudflare's IP ranges
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/sbin/cloudflare-ips-sync

@@ -1,0 +1,46 @@
+#!/bin/bash
+# Keep the firewall and Caddy in step with Cloudflare's published IP ranges.
+#  - ufw: ports 80/443 accept only Cloudflare (SSH stays open to all).
+#  - Caddy: trusts CF-Connecting-IP only from Cloudflare, so logs show real visitor IPs.
+# Installed as /usr/local/sbin/cloudflare-ips-sync and run weekly by cloudflare-ips-sync.timer.
+# Source of truth: ops/cloudflare-ips-sync in the truly_free_fonts project.
+set -euo pipefail
+
+state=/var/lib/cloudflare-ips/ranges
+snippet=/etc/caddy/cloudflare-ips.caddy
+
+fetched=$(curl -fsS --max-time 30 https://www.cloudflare.com/ips-v4; echo; curl -fsS --max-time 30 https://www.cloudflare.com/ips-v6)
+ranges=$(grep -E '^[0-9a-fA-F:.]+/[0-9]+$' <<<"$fetched" | sort -u)
+count=$(grep -c . <<<"$ranges" || true)
+if [ "$count" -lt 10 ]; then
+	echo "Only $count ranges fetched from Cloudflare; changing nothing." >&2
+	exit 1
+fi
+
+# Allow the current ranges first, so the web ports are never closed to Cloudflare.
+for r in $ranges; do
+	ufw allow proto tcp from "$r" to any port 80,443 comment cloudflare >/dev/null
+done
+
+# Drop ranges that Cloudflare no longer publishes.
+if [ -f "$state" ]; then
+	for r in $(comm -23 "$state" <(echo "$ranges")); do
+		ufw delete allow proto tcp from "$r" to any port 80,443 >/dev/null && echo "removed stale range $r"
+	done
+fi
+mkdir -p "$(dirname "$state")"
+echo "$ranges" >"$state"
+
+# Close the open-to-everyone web rules (no-op once they are gone).
+ufw delete allow 80/tcp >/dev/null 2>&1 || true
+ufw delete allow 443/tcp >/dev/null 2>&1 || true
+
+# Caddy trusted proxies; reload only when the list changed.
+line="trusted_proxies static $(tr '\n' ' ' <<<"$ranges" | sed 's/ $//')"
+if [ "$(cat "$snippet" 2>/dev/null)" != "$line" ]; then
+	echo "$line" >"$snippet"
+	chmod 644 "$snippet"
+	systemctl reload caddy && echo "caddy trusted proxies updated"
+fi
+
+echo "cloudflare-ips-sync: $count ranges in place"
