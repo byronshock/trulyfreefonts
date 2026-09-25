@@ -24,7 +24,7 @@ Compare the fonts a user already has installed with a ranked list of the most po
 Answers to the Milestone 1, Step 0 decisions in [docs/ranking-methodology.md](docs/ranking-methodology.md) (under review in [pull request #1](https://github.com/byronshock/trulyfreefonts/pull/1)).
 
 - **D8: automatically installed fonts.** Fonts that Linux systems preinstall or pull in as dependencies of other packages stay in the rankings. The desktop rank is published as two views:
-  - **most chosen:** Linux sources set aside their automatic installs;
+  - **most chosen:** a Linux source is left out for any font that a Linux system preinstalls or that other packages mostly pull in (threshold in the methodology); the font is still ranked on its other sources;
   - **most installed:** every install counts.
 
   Only **most chosen** feeds the overall rank. Affected fonts are tagged with the systems or packages that bring them in. *(2026-09-25)*
