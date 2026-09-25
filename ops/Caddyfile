@@ -31,9 +31,23 @@ trulyfreefonts.com {
 		-Server
 	}
 
+	# Visitor privacy: IP addresses are masked (IPv4 to /16, IPv6 to /32) and the
+	# IP-carrying headers dropped before anything is written. Caddy's size-based
+	# rolling is off; logrotate keeps 14 days (ops/logrotate-caddy).
 	log {
-		output file /var/log/caddy/access.log
-		format json
+		output file /var/log/caddy/access.log {
+			roll_disabled
+		}
+		format filter {
+			wrap json
+			fields {
+				request>remote_ip ip_mask 16 32
+				request>client_ip ip_mask 16 32
+				request>remote_port delete
+				request>headers>Cf-Connecting-Ip delete
+				request>headers>X-Forwarded-For delete
+			}
+		}
 	}
 }
 

@@ -11,6 +11,7 @@ How the Contabo VPS and the three Cloudflare zones are set up. The settled decis
 | SSH | `ssh tff` (user `byron`, key `~/.ssh/id_ed25519`, passwordless sudo) |
 | Site root | `/srv/trulyfreefonts/public` |
 | Web server config | [ops/Caddyfile](Caddyfile) → `/etc/caddy/Caddyfile` |
+| Access log | `/var/log/caddy/access.log`: IPs masked to /16 (IPv4) and /32 (IPv6), IP headers and port dropped; 14 days kept by logrotate ([ops/logrotate-caddy](logrotate-caddy) → `/etc/logrotate.d/caddy-trulyfreefonts`) |
 | Origin cert | `/etc/caddy/certs/` (Cloudflare Origin CA, 15 years) |
 | Cloudflare zone IDs | in `ops/SERVER.local.md`, or `ops/cf.sh GET /zones` |
 | Cloudflare token | `~/.config/trulyfreefonts/cloudflare.env` on the laptop (mode 600, never committed) |
@@ -54,9 +55,15 @@ How the Contabo VPS and the three Cloudflare zones are set up. The settled decis
 - [x] 15. Cloudflare Email Routing `admin@trulyfreefonts.com` → Gmail; "no mail" SPF/DMARC on .org and .net. (Email Routing records: MX route1–3.mx.cloudflare.net, SPF, DKIM `cf2024-1`.)
 - [x] 16. Contabo snapshot (taken 2026-09-25; auto-deleted after 30 days, around 2026-10-25).
 
+### F. Visitor privacy (Claude)
+- [x] 17. Cloudflare Network Error Logging (the `NEL` / `Report-To` headers, which made browsers report connection failures to a.nel.cloudflare.com) turned off on all 3 zones (`PATCH /zones/<id>/settings/nel` `{"value":{"enabled":false}}`). *(2026-09-25)*
+- [x] 18. Access log privacy: the Caddyfile log filter masks `remote_ip` and `client_ip` (/16, /32) and drops `remote_port`, `Cf-Connecting-Ip` and `X-Forwarded-For`; Caddy's rolling is off; `logrotate` installed and keeps 14 days, rotated daily. Lines logged before the change were masked in place. *(2026-09-25)*
+
 ## Verification
 - `ssh tff sudo -n true` works; `ssh root@<IP>` and `ssh -o PubkeyAuthentication=no tff` are refused.
 - `ssh tff 'sudo ufw status verbose; systemctl is-active caddy fail2ban unattended-upgrades'` is all active.
 - `dig +short trulyfreefonts.com` returns Cloudflare IPs.
 - `curl -sI https://trulyfreefonts.com` → 200, `server: cloudflare`. `www.`, `.org` and `.net` URLs → 301 to the same path on `https://trulyfreefonts.com`.
 - SSL mode is `strict` on all 3 zones.
+- `curl -sI https://trulyfreefonts.com` has no `nel` or `report-to` header.
+- `ssh tff 'sudo tail -1 /var/log/caddy/access.log'` shows a masked `client_ip` (ending `.0.0` or `::`), no `remote_port`, and no `Cf-Connecting-Ip` or `X-Forwarded-For` header. `sudo logrotate --debug /etc/logrotate.d/caddy-trulyfreefonts` reports no errors.

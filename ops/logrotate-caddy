@@ -1,0 +1,15 @@
+# /etc/logrotate.d/caddy-trulyfreefonts: keep 14 days of the access log.
+# The log is already IP-masked by the Caddyfile's log filter. Caddy's own
+# size-based rolling is off (roll_disabled), so logrotate does all rotation.
+# Deploy: scp ops/logrotate-caddy tff:/tmp/ && ssh tff 'sudo install -m 644 /tmp/logrotate-caddy /etc/logrotate.d/caddy-trulyfreefonts'
+/var/log/caddy/access.log {
+	su caddy caddy
+	daily
+	rotate 14
+	maxage 14
+	missingok
+	notifempty
+	compress
+	delaycompress
+	copytruncate
+}
