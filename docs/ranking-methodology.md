@@ -397,7 +397,7 @@ They live in committed files under `state/` on the main branch.
 ## 7. Per font in catalog.json
 
 - **Identity:** `id` (stable; see §2), `family`, `category`, `is_monospace`, `superfamily_id`, `aliases[]`, `related[]` (for example, Adwaita Sans is "derived from Inter").
-- **License:** `license` {spdx, class, redistributable, attribution_required, text_url, verified_level, text_sha256, checked_on}.
+- **License:** `license` {spdx, class, redistributable, attribution_required, text_url, verified_level, text_sha256, checked_on}, plus `font_file` {url, sha256}: the font file the license check read, which previews are built from.
 - **Other fields:**
   - `latin` {basis, coverage};
   - `formats` {variable, static};
@@ -410,7 +410,7 @@ They live in committed files under `state/` on the main branch.
 - **Per source:** {state, rank_in_source, z, weight_used}. Raw values appear only where the source's terms allow.
 - **Top level:** run date, method version, `ranking.toml` hash, fetch times.
 
-A trimmed `catalog-site.json` feeds the filterable list (Milestone 2).
+A trimmed `catalog-site.json` feeds the filterable list (Milestone 2), and `names.json`, the names and aliases of every eligible family, feeds the owned-font matching (Milestone 3).
 
 ## 8. Parameters (`config/ranking.toml`)
 

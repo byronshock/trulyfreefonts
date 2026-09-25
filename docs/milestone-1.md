@@ -273,7 +273,8 @@ Tick each item as soon as it is done and verified. If an item is only partly don
 - [ ] L3, for overall rank 700 or better and the top 150 of the project rank and both desktop views:
   - fetch the upstream license text and match its fingerprint;
   - check name-table IDs 13 and 14;
-  - store text_url, sha256, checked_on and font_version.
+  - store text_url, sha256, checked_on and font_version;
+  - record the font file this check used as `font_file` {url, sha256}; Milestone 2 builds previews from it.
 - [ ] Any font that fails L3 leaves the catalog; rerun the rank.
 
 **Done when:**
@@ -313,13 +314,19 @@ Tick each item as soon as it is done and verified. If an item is only partly don
   - formats, Latin coverage;
   - license {spdx, class, redistributable, attribution_required, text_url};
   - preview_ok, links, preinstalled_on, pulled_in_by;
-  - rank or band, `order` and tier for each published rank.
+  - rank or band, `order`, tier and 5–95% range for each published rank;
+  - `aliases[]` (old names and build names, for search and matching);
+  - per source: {state, rank_in_source}, only as far as the step 3 terms ruling allows;
+  - `flags[]`: held back by the two-group gate, no evidence of deliberate installs, too new;
+  - designer-list membership, if D12 is (a);
+  - `preview` {path, sha256} for fonts with a preview.
 
-  The file also carries the data license and source credits.
+  At the top level, the file also carries the run date, method version, stale sources with their data dates, the data license and the source credits. Milestone 2's step 2 reviews this list before it is frozen.
+- [ ] `names.json`: the names and aliases of every eligible family in the universe, not only the catalog. Milestone 3's matching uses it, so a real font outside the catalog is recognised instead of showing up as a near-match.
 - [ ] A monthly diff (entries, exits, big moves, license changes) and the flags, written to `build/review.md`.
 - [ ] `docs/catalog-schema.md` documents both files.
 
-**Done when:** both files validate in CI and the hard checks pass on the real run.
+**Done when:** the three files validate in CI and the hard checks pass on the real run.
 
 ### Step 16: First full run and owner review of the top lists
 **Who:** both. **Depends on:** 15.
@@ -364,19 +371,19 @@ Tick each item as soon as it is done and verified. If an item is only partly don
   - has write permission for `contents`, `pull-requests` and `issues`.
 - [ ] It opens or updates a pull request on the fixed branch `refresh/monthly`, with `catalog.json`, `catalog-site.json`, `review.md` and the `state/` changes. A hard failure fails the job and opens an issue instead.
 - [ ] Check the collectors on GitHub's runners: rate limits, the GitHub API budget, and whether Google's endpoints respond.
-- [ ] A watchdog for GitHub's rule that disables scheduled workflows in public repositories after 60 days without activity: flag it if no refresh pull request has appeared for 35 days.
+- [ ] A watchdog for GitHub's rule that disables scheduled workflows in public repositories after 60 days without activity. It runs outside this repository's schedule (for example a timer on the VPS reading GitHub's public API, which the rule can't disable), and warns the owner if no refresh pull request has appeared for 35 days, or `main` has had no commit for 50 days.
 
 **Done when:** a manual dispatch opens a correct pull request, CI runs on it, and the owner merges it.
 
 ### Step 20: Handoff to Milestone 2
 **Who:** both. **Depends on:** 17, 19.
-- [ ] `catalog-site.json` v1 is frozen, with a sample file and the schema doc.
+- [ ] `catalog-site.json` v1 is frozen, with a sample file and the schema doc, but only after Milestone 2's step 2 has approved its fields.
 - [ ] A handoff note lists what Milestone 2 must settle:
   - the default rank order;
   - numbering under filters;
   - the deploy path to the VPS;
   - the methodology page.
 - [ ] The runbook lists the manual tasks (methodology §10).
-- [ ] "Current step" in AUTHORITY.md moves to Milestone 2.
+- [ ] "Current step" in AUTHORITY.md moves to Milestone 2, and `docs/roadmap.md` shows the new status.
 
 **Done when:** the owner accepts the handoff.
