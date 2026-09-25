@@ -38,6 +38,7 @@ Answers to the Milestone 1, Step 0 decisions in [docs/ranking-methodology.md](do
 - **Cloudflare.** Proxied (orange cloud), SSL mode Full (strict), with a Cloudflare Origin CA certificate on the server.
 - **Access.** One admin user `byron`, key-only SSH, passwordless sudo, root login off. Local alias `ssh tff`. Claude manages the server over SSH and Cloudflare through an API token; its ssh/scp/rsync commands to `tff` are auto-allowed in this project.
 - **Secrets.** Kept out of the project: the Cloudflare token lives in `~/.config/trulyfreefonts/cloudflare.env`, and the root password (VNC emergency access only) lives in the owner's password manager.
+- **Visitor privacy on the server.** Cloudflare's Network Error Logging is off on all three zones. The access log masks visitor IPs to /16 (IPv4) and /32 (IPv6), drops the port and IP-carrying headers, and is kept for 14 days. *(2026-09-25)*
 
 ## Repository and workflow
 
