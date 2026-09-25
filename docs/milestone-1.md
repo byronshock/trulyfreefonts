@@ -17,7 +17,7 @@ Tick each item as soon as it is done and verified. If an item is only partly don
 
 ### Step 0: Owner reviews the ranking methodology
 **Who:** owner; Claude answers questions and makes edits. **Depends on:** nothing.
-- [ ] Claude opens a pull request adding `docs/ranking-methodology.md` (status: proposal) and this checklist.
+- [x] Claude opens a pull request adding `docs/ranking-methodology.md` (status: proposal) and this checklist. ([#1](https://github.com/byronshock/trulyfreefonts/pull/1))
 - [ ] Claude posts a rough preview in the pull request: the top 50 of the desktop, project and overall ranks, built from the local data of 2026-09-25 with naive name matching and labelled "rough".
 - [ ] The owner answers the eleven **DECISION [Step 0]** items and edits any [later OK] default:
   - D1 method;
