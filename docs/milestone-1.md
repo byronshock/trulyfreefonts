@@ -33,7 +33,7 @@ Tick each item as soon as it is done and verified. If an item is only partly don
   - D17 licenses (the data license stays provisional until step 3).
 - [ ] If D12 is (a), the owner names 3–5 designer lists (with URLs); otherwise designer picks are set to 0.
 - [ ] Claude records each answer in AUTHORITY.md with its date.
-- [ ] Claude updates the stale lines in PLAN.md, which stays local and untracked:
+- [x] Claude updates the stale lines in PLAN.md, which stays local and untracked:
   - "reciprocal-rank fusion";
   - "publishes by rsync";
   - "Google Fonts metadata" as a ranking source.
