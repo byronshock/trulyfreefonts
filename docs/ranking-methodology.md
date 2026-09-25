@@ -13,7 +13,9 @@ Every number is a default in `config/ranking.toml`, which the owner can edit. Th
 >
 > A font's score is the weighted average over the sources that could have seen it. A source that doesn't carry a font at all (a Linux distribution with no package for it) is left out, not counted as zero.
 >
-> Fonts with little evidence are pulled toward the middle. No font reaches the top 100 on one kind of evidence alone. The overall rank blends the desktop and project ranks. Past #100 we show bands, because the data can't separate those fonts precisely.
+> Fonts with little evidence are pulled toward the middle. No font reaches the top 100 on one kind of evidence alone.
+>
+> The desktop rank comes in two versions: **most installed**, which counts every install, and **most chosen**, which sets aside fonts that Linux systems install automatically. The overall rank blends *most chosen* with the project rank. Past #100 we show bands, because the data can't separate those fonts precisely.
 
 **Principles:**
 
@@ -108,7 +110,7 @@ In every option:
 |---|---|---|
 | Observed | at or above the source's noise floor | normal term |
 | Censored | the source could have shown the font (it has a package, or it is a crawl or top-N list whose frame includes the font), but the value is below the floor or missing | a term at the censored value (below) |
-| Not covered | no package; outside a list's frame (a non-Google font on a Google-only list); merged away by the Almanac's name regex; a Linux source abstaining because the font is preinstalled or pulled in by another package | no term |
+| Not covered | no package; outside a list's frame (a non-Google font on a Google-only list); merged away by the Almanac's name regex; in the *most chosen* desktop view only, a Linux source abstaining because the font is preinstalled or pulled in by another package | no term |
 | Too new | under 60 days on that channel | no term; "New" badge |
 
 **One ruler.** Every source is measured against one ruler: the Homebrew font casks. They cover 1,940 of the 1,946 Google families and most non-Google fonts. The ruler is built after the gates and alias-summing, with the same Nerd, bundle and CJK credits as the Homebrew source. Homebrew's noise floor applies only to Homebrew's own term. On the ruler, it would tie hundreds of tail casks.
@@ -173,7 +175,15 @@ Each font also shows its rank in every source. The site data carries an internal
 
 ## 5. The rankings
 
-### Desktop installed: fonts people choose to install
+### Desktop: two views
+
+Both views use the sources below. They differ only in how fonts that Linux systems install automatically are counted (decision D8):
+
+- **Most chosen** (`desktop_chosen`): fonts people deliberately install. Linux sources abstain for fonts that are preinstalled or pulled in by another package (see the dependency note). **This view feeds the overall rank.**
+- **Most installed** (`desktop_installed`): fonts on the most computers. Every install counts as it is, automatic or not. Published as its own view; it does not affect the overall rank.
+
+In both views, affected fonts carry a tag naming the systems they come with (`preinstalled_on`) or the packages that pull them in (`pulled_in_by`).
+
 
 | Source | Weight | Handling |
 |---|---|---|
@@ -193,12 +203,12 @@ Each font also shows its rank in every source. The site data carries an internal
   - from month 12: the 12-month difference.
 
   Only assets present in both snapshots count. Negative differences (deleted or re-uploaded assets) are clamped to 0 and flagged. At most 24 months of release history is fetched.
-- **Linux dependency correction.** A Linux source abstains for a font when the font's top reverse Depends/Recommends/Provides accounts for at least 50% of its installs, or when the font is on the owner's preinstalled list. Dependencies are parsed from:
+- **Linux dependency correction (most chosen only).** In the *most chosen* view, a Linux source abstains for a font when the font's top reverse Depends/Recommends/Provides accounts for at least 50% of its installs, or when the font is on the owner's preinstalled list. Dependencies are parsed from:
   - Arch core/extra;
   - the CachyOS and EndeavourOS repository databases (cachyos-kde-settings, on 3.57% of Arch systems in Aug 2026, requires ttf-fantasque-nerd, ttf-fira-sans and noto-fonts);
   - Debian's Packages.xz.
 
-  Homebrew and Chocolatey installs are explicit, so they count as they are.
+  Homebrew and Chocolatey installs are explicit, so they count as they are in both views. The *most installed* view skips this correction for every source.
 - **Resolution.** The data separates roughly 200–300 families.
 
 **DECISION [Step 0] D7: Nerd and CJK credit.** How much a patched build's installs count toward the original font:
@@ -206,11 +216,7 @@ Each font also shows its rank in every source. The site data carries an internal
 - `nerd_credit`: 1.0, 0.5 (default) or 0. About 59% of Homebrew font installs are Nerd casks. Meslo LG ranks high because Powerlevel10k recommends it.
 - `cjk_build_credit` (Maple Mono NF CN and similar): 0.5 by default. A build that is both an NF and a CN build gets the smaller of the two credits.
 
-**DECISION [Step 0] D8: preinstalled and dependency-pulled fonts.**
-
-- **(a, default)** Linux sources abstain, and a `preinstalled_on` tag is shown. The owner reviews new entries when the script flags them.
-- **(b)** Subtract estimated dependency installs.
-- **(c)** Use raw counts.
+**D8 (decided 2026-09-25): preinstalled and dependency-pulled fonts.** Publish two desktop views, *most chosen* and *most installed*, as described at the top of this section. *Most chosen* feeds the overall rank. The owner reviews new preinstalled and dependency entries when the script flags them.
 
 **DECISION [later OK] D9:** desktop weights as in the table. Noise estimates suggesting Arch deserves 1.0 came from only 45 families, before correction.
 
@@ -268,12 +274,12 @@ Print stays at 0, because the terms of Fonts In Use forbid robots.
 
 **DECISION [Step 0] D12: overall mix.**
 
-- **(a, default)** Desktop 0.45, project 0.45, designer picks 0.10.
+- **(a, default)** Desktop (*most chosen*) 0.45, project 0.45, designer picks 0.10.
   - The owner names 3–5 fixed public lists, such as Typewolf's "40 Best Google Fonts (2026)".
   - They are entered by hand once a year (a manual task) and never compiled by an LLM.
   - We publish only whether a font is on a list, not its position there.
   - Fonts inside a list's frame but not on it are censored; fonts outside its frame are not covered.
-- **(b)** Desktop 0.5 and project 0.5, measuring usage only.
+- **(b)** Desktop (*most chosen*) 0.5 and project 0.5, measuring usage only.
 
 ### Recommended extra views
 
@@ -395,11 +401,11 @@ They live in committed files under `state/` on the main branch.
   - `latin` {basis, coverage};
   - `formats` {variable, static};
   - `preview_ok`;
-  - `preinstalled_on[]`;
+  - `preinstalled_on[]`, `pulled_in_by[]`;
   - `links` {primary, designer};
   - `first_seen`;
   - `flags[]`.
-- **Per rank or view:** {rank or band, order, tier, range, score, groups}. The rank keys (`overall`, `desktop`, `project`, `coding`, `dev_apps`, `rising`) are versioned schema constants.
+- **Per rank or view:** {rank or band, order, tier, range, score, groups}. The rank keys (`overall`, `desktop_chosen`, `desktop_installed`, `project`, `coding`, `dev_apps`, `rising`) are versioned schema constants.
 - **Per source:** {state, rank_in_source, z, weight_used}. Raw values appear only where the source's terms allow.
 - **Top level:** run date, method version, `ranking.toml` hash, fetch times.
 
@@ -415,7 +421,7 @@ Source weights and floors are in the §5 tables.
 | ruler overlap: full weight / off | 50 / 15 |
 | min_exposure_days | 60, counted from the data date |
 | nerd_credit, cjk_build_credit, bundle_credit | 0.5, 0.5, 0.5 |
-| dependency_abstain | 0.5 |
+| dependency_abstain (*most chosen* only) | 0.5 |
 | almanac_parent_merge_factor | 0.5 |
 | fot_phase_in | weight 0.10 until 8 weekly snapshots |
 | outlier guard | gap 1.5 z, at least 3 terms, weight × 0.5 |
@@ -439,7 +445,8 @@ Source weights and floors are in the §5 tables.
   - Sauce Code Pro → Source Code Pro;
   - Roboto Slab gets no Roboto counts;
   - a renamed family keeps its `id`;
-- a higher count lowers a rank when the outlier guard didn't fire.
+- a higher count lowers a rank when the outlier guard didn't fire;
+- the two desktop views differ for any reason other than Linux abstentions.
 
 **Flags in the pull request, not blocking:**
 
@@ -473,7 +480,7 @@ The monthly pull request asks the owner only to review what it flags: new aliase
 
 - **Developer skew.** The desktop data comes from developers who leave telemetry on. About 59% of Homebrew font installs are Nerd builds. The 10 biggest plain casks come from 8 families, and 7 of those are coding fonts.
 - **Thin platform coverage.** Windows shows up only through Chocolatey, and designers who download zips only through GitHub counters.
-- **Defaults.** Installs driven by tool defaults count (Meslo via Powerlevel10k). The preinstalled list is kept by hand, and derivative distributions we don't parse leak through.
+- **Defaults.** Installs driven by tool defaults count in both desktop views (Meslo via Powerlevel10k). Fonts that Linux systems install automatically count fully in *most installed* and are set aside in *most chosen*. The preinstalled list is kept by hand, and derivative distributions we don't parse leak through into *most chosen*.
 - **Web data.**
   - FOT crawls US homepages only, and half of them are startups.
   - The Almanac is yearly, covers only the top 100, and folds width cuts into their parents.

@@ -19,12 +19,12 @@ Tick each item as soon as it is done and verified. If an item is only partly don
 **Who:** owner; Claude answers questions and makes edits. **Depends on:** nothing.
 - [x] Claude opens a pull request adding `docs/ranking-methodology.md` (status: proposal) and this checklist. ([#1](https://github.com/byronshock/trulyfreefonts/pull/1))
 - [x] Claude posts a rough preview in the pull request ([comment](https://github.com/byronshock/trulyfreefonts/pull/1#issuecomment-5833687627)): the top 50 of the desktop, project and overall ranks, built from the local data of 2026-09-25 with naive name matching and labelled "rough".
-- [ ] The owner answers the eleven **DECISION [Step 0]** items and edits any [later OK] default:
+- [ ] The owner answers the eleven **DECISION [Step 0]** items and edits any [later OK] default. *(Partly done: D8 answered; 10 left.)*
   - D1 method;
   - D3 license classes and previews;
   - D4 Latin;
   - D7 Nerd and CJK credit;
-  - D8 preinstalled fonts;
+  - ~~D8 preinstalled fonts~~ answered 2026-09-25: two desktop views (*most chosen* feeds overall; *most installed* shown alongside);
   - D10 project scope;
   - D12 overall mix;
   - D13 extra views;
@@ -32,7 +32,7 @@ Tick each item as soon as it is done and verified. If an item is only partly don
   - D15 snapshot storage;
   - D17 licenses (the data license stays provisional until step 3).
 - [ ] If D12 is (a), the owner names 3–5 designer lists (with URLs); otherwise designer picks are set to 0.
-- [ ] Claude records each answer in AUTHORITY.md with its date.
+- [ ] Claude records each answer in AUTHORITY.md with its date. *(Partly done: D8 recorded.)*
 - [x] Claude updates the stale lines in PLAN.md, which stays local and untracked:
   - "reciprocal-rank fusion";
   - "publishes by rsync";
@@ -231,13 +231,14 @@ Tick each item as soon as it is done and verified. If an item is only partly don
 
 ### Step 10: Confound corrections
 **Who:** Claude; the owner reviews flagged preinstalled entries. **Depends on:** 8, 9.
-- [ ] Reverse-dependency abstentions (at 50% or more), plus abstentions for preinstalled fonts.
+- [ ] For the *most chosen* view: reverse-dependency abstentions (at 50% or more), plus abstentions for preinstalled fonts. The *most installed* view keeps every count.
+- [ ] `preinstalled_on` and `pulled_in_by` tags for each affected font, used by both views.
 - [ ] Noise floors (Homebrew, the Arch Nerd Fonts group, Nerd release downloads), bundle, Nerd and CJK credits, and exposure counted from data dates.
 - [ ] A per-font correction report, with new cases flagged for the owner.
 
 **Done when:**
 - the owner has reviewed the report;
-- Quicksand and DejaVu abstain on Debian, and Hack abstains on Arch;
+- in *most chosen*, Quicksand and DejaVu abstain on Debian and Hack abstains on Arch; in *most installed*, they count;
 - Fantasque Sans Mono and Fira Sans have been checked against CachyOS's dependencies.
 
 ### Step 11: Per-survey ranking engine
@@ -253,12 +254,12 @@ Tick each item as soon as it is done and verified. If an item is only partly don
 - [ ] The worked example (2.48 / 2.15 / 1.98) as a fixture.
 - [ ] Cross-checks: coverage-aware RRF (k=60) and the Fontsource ruler.
 
-**Done when:** the tests pass and the desktop and project ranks are produced from real data.
+**Done when:** the tests pass, and both desktop views and the project rank are produced from real data.
 
 ### Step 12: Overall rank, views and membership
 **Who:** Claude. **Depends on:** 11.
-- [ ] Overall rank with split weights, shrunk once.
-- [ ] Views: Coding, Developers & apps, categories, Rising (beta).
+- [ ] Overall rank with split weights (desktop from *most chosen*), shrunk once.
+- [ ] Views: Desktop *most installed*, Coding, Developers & apps, categories, Rising (beta).
 - [ ] A test that changing any view's weights leaves the overall rank unchanged.
 - [ ] Catalog membership (the top 500 plus each survey's top 100), with hysteresis counters in `state/`.
 
