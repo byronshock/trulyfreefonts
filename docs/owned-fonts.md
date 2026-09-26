@@ -89,7 +89,7 @@ Add-Type -AssemblyName System.Drawing; (New-Object System.Drawing.Text.Installed
 
 ## Cloudflare
 
-Cloudflare's settings and the site's headers belong to [Milestone 2](milestone-2.md) (step 9); the check's privacy test re-verifies them after each deploy. Seen on trulyfreefonts.com on 2026-09-25: the stub page arrived unchanged, with no injected scripts. Cloudflare's Network Error Logging (`NEL` and `Report-To` headers, which ask browsers to report connection failures to `a.nel.cloudflare.com`) was on; it was turned off on all three zones the same day ([ops/SERVER.md](../ops/SERVER.md) section F). Free-plan zones have reportedly had the Web Analytics beacon injected by default since September 2025, and Bot Fight Mode injects a script under `/cdn-cgi/challenge-platform/`; Milestone 2 step 9 turns both off.
+Cloudflare's settings and the site's headers belong to [Milestone 2](milestone-2.md) (step 9); the check's privacy test re-verifies them after each deploy. Seen on trulyfreefonts.com on 2026-09-25: plain `curl` got the stub unchanged, but a request sending a browser's `Accept: text/html` header got the Web Analytics beacon injected (`static.cloudflareinsights.com`), so checks must send that header. Cloudflare's Network Error Logging (`NEL` and `Report-To` headers, which ask browsers to report connection failures to `a.nel.cloudflare.com`) was on; it was turned off on all three zones the same day ([ops/SERVER.md](../ops/SERVER.md) section F). Free-plan zones have had the Web Analytics beacon on by default since October 2025, and Bot Fight Mode injects a script under `/cdn-cgi/challenge-platform/`; Milestone 2 step 9 turns both off.
 
 ## Open questions for step 1
 
