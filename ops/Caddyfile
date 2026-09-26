@@ -56,3 +56,7 @@ www.trulyfreefonts.com, trulyfreefonts.org, www.trulyfreefonts.org, trulyfreefon
 	import origin_tls
 	redir https://trulyfreefonts.com{uri} permanent
 }
+
+# Other sites on this server, each owned and deployed by its own repo:
+#   sites/walnutbutter.caddy  walnutbutter.ai (byronshock/walnutbutter-site, deploy/walnutbutter.caddy)
+import /etc/caddy/sites/*.caddy
