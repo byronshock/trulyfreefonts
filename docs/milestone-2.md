@@ -41,7 +41,7 @@ Tick each item as soon as it is done and verified. If an item is only partly don
 - [ ] `site/` (templates, one stylesheet, one script, static files) builds into `build/site/` (gitignored); the stub in `public/` stays live until step 14.
 - [ ] `uv run tff-site build` (M2-D3 (a)) checks the data against M1 step 15's schema, writes the default rank (M2-D1) into `index.html`, hashes asset names (`/assets/<name>.<hash>.<ext>`), writes `version.txt` (commit, run date) and makes no network requests.
 - [ ] A local preview server sends the Caddyfile's headers.
-- [ ] Per page: `lang="en"`, title, meta description, canonical URL. Site-wide: `robots.txt`, `sitemap.xml`, a favicon, a 404 page (Caddy `handle_errors`) and a share image on our own domain. The interface uses the system font stack.
+- [ ] Per page: `lang="en"`, title, meta description, canonical URL. Site-wide: `robots.txt` (the live copy must match the repo's, since Cloudflare's Bot Preference Sync adds lines when an AI bot policy blocks or disallows), `sitemap.xml`, a favicon, a 404 page (Caddy `handle_errors`) and a share image on our own domain. The interface uses the system font stack.
 - [ ] CI on every pull request builds from the sample and runs the Playwright tests of steps 3, 6, 9 and 10 (Playwright never ships).
 
 **Done when:** CI builds from the sample, two builds are byte-identical, and the local preview shows the ranked list.
@@ -138,7 +138,7 @@ Tick each item as soon as it is done and verified. If an item is only partly don
   - `no-transform` on HTML (step 11), so Cloudflare can't rewrite pages even if a setting changes;
   - the current HSTS, `nosniff` and `Referrer-Policy: strict-origin-when-cross-origin`.
 - [x] Via `ops/cf.sh`, on all three zones: Email Address Obfuscation off (it was on and injected a script); Rocket Loader and Always Online kept off; Browser Cache TTL "Respect Existing Headers" (was 4 hours). *(Done 2026-09-25; [ops/SERVER.md](../ops/SERVER.md) item 19.)*
-- [ ] Owner, in the dashboard: Web Analytics' automatic setup disabled (on by default); Bot Fight Mode off (it sets `__cf_bm`); Zaraz and Cloudflare Fonts unused.
+- [x] Owner, in the dashboard: Web Analytics' automatic setup disabled (it was on by default, and injecting the beacon into browser requests on 2026-09-25); Bot Fight Mode off (it sets `__cf_bm`). Steps are in [ops/SERVER.md](../ops/SERVER.md) items 20–21. Cloudflare Fonts and Speed Brain were confirmed off via the API, and no Zaraz script appears in the page. *(Done and verified from outside 2026-09-25.)*
 - [x] Network Error Logging off on all three zones, and the access log per M2-D9 (done 2026-09-25; [ops/SERVER.md](../ops/SERVER.md) section F). The live test below and step 14's SERVER.md checks re-verify them.
 - [ ] A Playwright test (Chromium, Firefox) loads every page, applies filters, opens details and scrolls every specimen into view, failing on any request to another site, cookie, browser-storage write or CSP violation. It runs in CI and after each deploy on the live site, where it also checks headers (CSP present; no `set-cookie`, `nel` or `report-to`) and that the HTML has no `/cdn-cgi/` path. If M3-D13 (browser storage) stores anything, Milestone 3 turns the storage check into a key allowlist.
 
