@@ -65,9 +65,9 @@ Tick each item as soon as it is done and verified. If an item is only partly don
 
 ### Step 3: Final privacy check
 **Who:** Claude; the owner does one network-tab check. **Depends on:** 1; M2-D9 (server logs); M3-D7 (match data loading), M3-D10 (previews after a comparison), M3-D13 (browser storage).
-- [ ] A request inventory lists each request's path and trigger: page load; the match file when a comparison starts (if M3-D7 loads it on demand); a "Load previews" click; a click on a report, download or tip link, the only cross-origin ones.
+- [ ] A request inventory lists each request's path and trigger: page load; the match file when a comparison starts (if M3-D7 loads it on demand); a "Load previews" or "Type your own text" click; a click on a report, download or tip link, the only cross-origin ones.
 - [ ] A Playwright test, extending M2 step 9's, pastes a test list in Chromium, Firefox and WebKit, then switches every rank and view, toggles "Show fonts I have" and scrolls each view. It fails on:
-  - any request after the paste, except a report, download or tip click, or M3-D7's one match-file request, which carries no list data;
+  - any request after the paste, except a report, download, tip, "Load previews" or "Type your own text" click, or M3-D7's one match-file request, which carries no list data;
   - any name from the list in a request or report link, except the installed name when its box is ticked;
   - any request to another host, or any cookie;
   - any browser storage beyond M3-D13's allowed keys.
@@ -136,7 +136,7 @@ Tick each item as soon as it is done and verified. If an item is only partly don
 - [ ] Every visitor sees the paste path, desktop Chromium also "Check my fonts", and phones and tablets a note that the check needs a computer.
 - [ ] Without a list, the full ranked list shows as in Milestone 2; with one, the missing fonts in rank order, with the "Show fonts I have" toggle, near-match flags and Report links.
 - [ ] Remove `noindex` (meta tag and `X-Robots-Tag`) from the check, and list `/check/` in `sitemap.xml` if it stays separate. `local-fonts=(self)` moves with the check.
-- [ ] Update `/privacy`: the list is read in the page and never sent; the match-file request (if on demand, M3-D7); the "Load previews" button (M3-D10); any storage keys M3-D13 allows.
+- [ ] Update `/privacy`: the list is read in the page and never sent; the match-file request (if on demand, M3-D7); the "Load previews" button (M3-D10) and "Type your own text" (M2-D5), each loading only on a click; any storage keys M3-D13 allows.
 - [ ] The results link to the methodology page's "How the check works" (M3 step 6).
 - [ ] Deploy per M2-D6 (purging if M2-D11 needs it), then rerun the step 3 test and the matching suite on the live site.
 - [ ] AUTHORITY.md: "Current step" moves to the launch.

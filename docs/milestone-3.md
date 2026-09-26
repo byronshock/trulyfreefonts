@@ -136,7 +136,7 @@ Step 3 waits on M1 steps 7 and 15, so steps 5–9 use a stand-in table until the
 - [ ] A static check: the check's modules have no `fetch`, `XMLHttpRequest`, `sendBeacon`, `WebSocket`, `EventSource`, dynamic `import()` or element `src` assignment, except one fetch of the match file's fixed URL under M3-D7's default.
 - [ ] M2's privacy test gains a case, in Chromium, Firefox and WebKit: once a list is loaded, matching every fixture, the stubbed button, switching views and filters, scrolling every view and clearing the list make no request, except:
   - under M3-D7's default, exactly one same-origin request for the hashed match file as the comparison starts, with no query string or body, and the same URL for every list;
-  - after a click on "Load previews", or on a report, download or tip link.
+  - after a click on "Load previews" or "Type your own text" (M2-D5), or on a report, download or tip link.
 - [ ] It also checks that the check works offline once the match file has loaded, sets no cookie, and stores nothing M3-D13 doesn't allow.
 - [ ] After each deploy it runs on the live site through Cloudflare, re-verifying M2's headers and Cloudflare privacy settings and step 6's headers.
 - [ ] `/privacy` gains a section on the check, linked from the check page: the list stays in the page; what is requested, and when (M3-D7, M3-D10); and how to confirm it in the network panel, or by going offline once the check is ready.
