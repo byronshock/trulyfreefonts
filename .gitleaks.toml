@@ -1,0 +1,8 @@
+# gitleaks configuration for the CI "secrets" job.
+# It extends gitleaks' built-in rules and allowlists nothing yet. Add an allowlist
+# entry only for a reviewed false positive, with a comment saying why.
+
+title = "trulyfreefonts"
+
+[extend]
+useDefault = true

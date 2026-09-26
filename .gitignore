@@ -4,3 +4,26 @@ PLAN.md
 
 # Server details kept out of the public repo (origin IPs, VNC console, zone IDs).
 ops/SERVER.local.md
+
+# Obsidian vault settings (local editor state).
+.obsidian/
+
+# Python and tool caches.
+.venv/
+__pycache__/
+*.egg-info/
+.ruff_cache/
+.pytest_cache/
+.hypothesis/
+
+# Pipeline and site working output. build/*.json, build/*.md and
+# build/specimens/ are committed; these are not.
+build/stage/
+build/state/
+build/site/
+build/cache/
+
+# Local research notes, private server notes and secrets.
+research/
+ops/*.local.md
+.env

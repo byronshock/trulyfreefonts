@@ -43,20 +43,20 @@ Tick each item as soon as it is done and verified. If an item is only partly don
 
 ### Step 1: Project setup
 **Who:** Claude; the owner turns on branch protection. **Depends on:** D17 from step 0; the rest can start during step 0.
-- [ ] A uv project on Python 3.14:
+- [x] A uv project on Python 3.14:
   - `pyproject.toml`, `src/tff_catalog/`, `tests/`, and a CLI named `tff-catalog`;
   - dependencies httpx, fonttools, numpy and jsonschema (tomllib is built in);
   - `uv.lock` committed.
-- [ ] Layout:
+- [ ] Layout: *(the directories exist; their files come in step 2 (`config/`), step 7 (`aliases.csv`) and step 15 (`build/`))*
   - `config/`: `ranking.toml`, `licenses.toml`, `preinstalled.toml`, `foundries.toml`;
   - `data/`: `aliases.csv`, `reviews/` (owner rulings);
   - `state/` (see step 3);
   - `build/`: `catalog.json`, `catalog-site.json`, `review.md`.
-- [ ] `LICENSE` (MIT) for code and `LICENSE-DATA` (CC BY-SA 4.0) for the catalog, per D17. The data license is marked provisional.
-- [ ] A README with source credits.
-- [ ] CI on every pull request: `uv run ruff check`, `uv run pytest`, and a secret scan (gitleaks).
+- [x] `LICENSE` (MIT) for code and `LICENSE-DATA` (CC BY-SA 4.0) for the catalog, per D17. The data license is marked provisional.
+- [x] A README with source credits.
+- [ ] CI on every pull request: `uv run ruff check`, `uv run pytest`, and a secret scan (gitleaks). *(`.github/workflows/ci.yml` has the `lint`, `test` and `secrets` jobs, and their commands pass locally; left: the first run on GitHub.)*
 - [ ] Owner: branch protection for `main` requiring the CI checks, with **0 required approvals**, because the owner can't approve their own pull requests.
-- [ ] Confirm `.gitignore` still excludes `PLAN.md`, `ops/SERVER.local.md` and `.claude/settings.local.json`.
+- [x] Confirm `.gitignore` still excludes `PLAN.md`, `ops/SERVER.local.md` and `.claude/settings.local.json`.
 
 **Done when:** a pull request with one trivial test passes CI, and both license files are on `main`.
 
