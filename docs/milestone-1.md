@@ -107,7 +107,7 @@ Tick each item as soon as it is done and verified. If an item is only partly don
   - jsDelivr;
   - Chocolatey;
   - GitHub.
-- [ ] Claude drafts a request to the Fonts Over Time author for an explicit data license (for example CC BY 4.0); the owner posts it. *(Drafted 2026-09-25; waiting for the owner to post it.)*
+- [x] Claude drafts a request to the Fonts Over Time author for an explicit data license (for example CC BY 4.0); the owner posts it. *(Posted 2026-09-25 as [fcjr/fontsovertime#1](https://github.com/fcjr/fontsovertime/issues/1).)*
 
 **Done when:**
 - fetching one real source twice leaves exactly one snapshot per date, with no duplicates;
