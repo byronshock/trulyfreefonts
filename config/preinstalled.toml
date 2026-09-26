@@ -1,0 +1,21 @@
+# Fonts that systems ship preinstalled (D8, milestone-1 step 2). SKELETON.
+#
+# Filled in wave 1 by agent I3 from the research: Linux defaults, Cascadia on
+# Windows 11, the macOS list, GNOME's Adwaita fonts, Android, the LibreOffice
+# bundle, and EndeavourOS's eos-base-group (gate C2 (rec)). The owner reviews it
+# at gate C1. Loaded strictly by tff_catalog.config into
+# config_model.PreinstalledConfig: unknown or missing keys fail.
+#
+# Only entries with os = "linux" make a Linux source abstain; the others only
+# add preinstalled_on tags.
+#
+# [systems.ubuntu-desktop]          # system id: lower case, digits, "-" or "_"
+# label = "Ubuntu desktop"
+# os = "linux"                      # windows | macos | linux | android
+# families = ["Ubuntu", "DejaVu Sans"]  # family names as the system ships them
+# source = "https://..."            # where the list comes from
+# note = ""                         # optional
+
+schema = 1
+
+[systems]

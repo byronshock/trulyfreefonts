@@ -14,6 +14,7 @@ concurrency:
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 # Job names are the required status checks on main: keep lint, test and secrets stable.
+# setup-uv installs the uv version that pyproject.toml's [tool.uv] required-version allows.
 jobs:
   lint:
     name: lint

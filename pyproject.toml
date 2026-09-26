@@ -50,6 +50,7 @@ build-backend = "uv_build"
 
 [tool.uv]
 default-groups = ["dev"]      # site CI: uv sync --locked --group browser
+required-version = ">=0.12.18,<0.13"  # uv.lock revision 3; setup-uv in CI reads this too
 
 [tool.uv.build-backend]
 module-name = ["tff_catalog", "tff_site"]

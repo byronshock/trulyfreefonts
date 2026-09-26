@@ -62,7 +62,7 @@ Tick each item as soon as it is done and verified. If an item is only partly don
 
 ### Step 2: Config files
 **Who:** Claude writes them; the owner edits values. **Depends on:** 0, 1.
-- [ ] `ranking.toml` holds every parameter in the methodology (the §5 tables and §8). It is validated on load, and unknown or missing keys fail.
+- [x] `ranking.toml` holds every parameter in the methodology (the §5 tables and §8). It is validated on load, and unknown or missing keys fail. *(Done 2026-09-25, with the rulings' gate values; `tests/test_config.py`.)*
 - [ ] `licenses.toml` sorts licenses into allowed, excluded and owner-ruling classes per D3. Anything not listed is excluded.
 - [ ] `preinstalled.toml`, seeded from the research and reviewed by the owner. Seeds:
   - Linux defaults;
@@ -74,7 +74,7 @@ Tick each item as soon as it is done and verified. If an item is only partly don
   Each entry names its system. Only Linux entries trigger abstentions; Windows, macOS and Android entries only add `preinstalled_on` tags.
   - the LibreOffice bundle.
 - [ ] `foundries.toml` is a hand list of the families of League of Moveable Type, Velvetyne, Collletttivo, Open Foundry and Roundo. Claude seeds it once from the foundry sites, and the owner reviews it with `preinstalled.toml`; the sites are not scraped each month (ruling M12).
-- [ ] `tff-catalog config` prints the effective config and its hash.
+- [x] `tff-catalog config` prints the effective config and its hash. *(Done 2026-09-25; the hash is stable across runs.)*
 
 **Done when:** the loader tests pass and the owner has reviewed `preinstalled.toml` and `foundries.toml`.
 

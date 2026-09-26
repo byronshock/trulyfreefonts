@@ -1,0 +1,144 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://trulyfreefonts.com/schemas/stage/terms/1",
+  "title": "Evidence terms",
+  "description": "build/stage/terms.json from stage 'correct': {rank key: {engine source: {family id: term}}}. value is after credits and floors; a Linux source that abstains has no entry in that view. group is the family's independence group for the source (gate M5 makes it per family); factor multiplies the source's weight for the family (w' = w_eff * factor * guard factor); flags are corrections.TERM_FLAGS.",
+  "type": "object",
+  "propertyNames": {
+    "enum": [
+      "overall",
+      "desktop_chosen",
+      "desktop_installed",
+      "project",
+      "coding",
+      "dev_apps",
+      "rising"
+    ]
+  },
+  "additionalProperties": {
+    "type": "object",
+    "propertyNames": {
+      "type": "string",
+      "maxLength": 64,
+      "pattern": "^[a-z0-9][a-z0-9_-]*$"
+    },
+    "additionalProperties": {
+      "type": "object",
+      "propertyNames": {
+        "type": "string",
+        "maxLength": 80,
+        "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+      },
+      "additionalProperties": {
+        "$ref": "#/$defs/term"
+      }
+    }
+  },
+  "$defs": {
+    "term": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "value",
+        "state",
+        "group",
+        "reason",
+        "factor",
+        "flags"
+      ],
+      "properties": {
+        "value": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "state": {
+          "enum": [
+            "observed",
+            "censored",
+            "not_covered",
+            "too_new"
+          ]
+        },
+        "group": {
+          "enum": [
+            "arch",
+            "debian",
+            "flutter",
+            "fot",
+            "github_counters",
+            "google",
+            "homebrew",
+            "http_archive",
+            "jsdelivr",
+            "npm_registry"
+          ]
+        },
+        "reason": {
+          "enum": [
+            null,
+            "below_floor",
+            "no_value",
+            "no_package",
+            "outside_frame",
+            "merged_into_parent"
+          ]
+        },
+        "factor": {
+          "type": "number",
+          "minimum": 0
+        },
+        "flags": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "maxLength": 64,
+            "pattern": "^[a-z0-9][a-z0-9_]*$"
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "state": {
+                "const": "observed"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "type": "number"
+              },
+              "reason": {
+                "const": null
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "state": {
+                "enum": [
+                  "not_covered",
+                  "too_new"
+                ]
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "const": null
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

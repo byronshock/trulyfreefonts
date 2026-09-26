@@ -1,0 +1,29 @@
+# License classes (D3 in AUTHORITY.md and methodology §2). SKELETON.
+#
+# Filled in wave 1 by agent I3 (config.py and the config files); the owner
+# reviews it at gate C. Loaded strictly by tff_catalog.config into
+# config_model.LicensesConfig: unknown or missing keys fail.
+#
+# Keys are SPDX ids, or LicenseRef-<name> for licenses SPDX lacks. A license
+# listed nowhere is excluded.
+#
+# [allowed."OFL-1.1"]
+# name = "SIL Open Font License 1.1"
+# group = "open-font"             # license-class filter group on the site
+# redistributable = true
+# attribution_required = false
+# note = ""                       # optional
+#
+# [excluded."CC-BY-SA-4.0"]
+# reason = "copyleft without a font exception (D3)"
+#
+# [ruling."LicenseRef-Ubuntu-Font-1.0"]
+# question = "Does the Ubuntu Font Licence allow all personal and commercial use?"
+
+schema = 1
+
+[allowed]
+
+[excluded]
+
+[ruling]

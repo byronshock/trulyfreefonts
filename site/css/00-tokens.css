@@ -1,0 +1,112 @@
+/* 00-tokens: design tokens. Every other part uses these custom properties and no raw colours.
+   Names are frozen in site/CONTRACT.md. Light and dark follow the system; nothing is stored.
+   Contrast (tests/test_site_contracts.py checks it): text tokens are at least 4.5:1 on
+   --c-bg, --c-surface and --c-badge-bg; --c-border and --c-focus at least 3:1 on the same. */
+
+:root {
+  color-scheme: light dark;
+
+  /* Type: the system font stack only. The site loads no web font of its own. */
+  --font-ui: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, "Cascadia Mono", "DejaVu Sans Mono", Menlo, Consolas, monospace;
+  --fs-small: 0.875rem;
+  --fs-base: 1rem;
+  --fs-large: 1.25rem;
+  --fs-xl: 1.5rem;
+  --fs-2xl: 2rem;
+  --lh-body: 1.5;
+  --lh-tight: 1.2;
+
+  /* Space and size. */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --radius: 6px;
+  --measure: 70ch;
+  --sidebar-width: 17rem;
+  --target-min: 24px;
+  --spec-h: 48px;
+  --row-est-h: 88px;
+
+  /* Focus: a 3px outline 2px outside the element, never hidden by a sticky header. */
+  --focus-width: 3px;
+  --focus-offset: 2px;
+  --focus-ring: var(--focus-width) solid var(--c-focus);
+
+  --duration: 150ms;
+
+  /* Colours, light. */
+  --c-bg: #ffffff;
+  --c-surface: #f4f5f7;
+  --c-fg: #1b1d21;
+  --c-muted: #50555c;
+  --c-border: #737880;
+  --c-divider: #d5d8dd;
+  --c-link: #0a56c2;
+  --c-link-visited: #6a3ab2;
+  --c-focus: #0a56c2;
+  --c-accent: #0a56c2;
+  --c-accent-fg: #ffffff;
+  --c-badge-bg: #e9ecf0;
+  --c-badge-fg: #1b1d21;
+  --c-warn-bg: #fdf0e1;
+  --c-warn-fg: #7a3a00;
+  --c-spec: currentColor;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --c-bg: #16181c;
+    --c-surface: #1f2227;
+    --c-fg: #e9eaec;
+    --c-muted: #aab0b8;
+    --c-border: #8a9099;
+    --c-divider: #33373e;
+    --c-link: #8ab4f8;
+    --c-link-visited: #c5a3f5;
+    --c-focus: #8ab4f8;
+    --c-accent: #8ab4f8;
+    --c-accent-fg: #16181c;
+    --c-badge-bg: #2b2f36;
+    --c-badge-fg: #e9eaec;
+    --c-warn-bg: #3b2a14;
+    --c-warn-fg: #ffd199;
+  }
+}
+
+@media (forced-colors: active) {
+  :root {
+    --c-bg: Canvas;
+    --c-surface: Canvas;
+    --c-fg: CanvasText;
+    --c-muted: CanvasText;
+    --c-border: CanvasText;
+    --c-divider: GrayText;
+    --c-link: LinkText;
+    --c-link-visited: VisitedText;
+    --c-focus: Highlight;
+    --c-accent: ButtonText;
+    --c-accent-fg: ButtonFace;
+    --c-badge-bg: Canvas;
+    --c-badge-fg: CanvasText;
+    --c-warn-bg: Canvas;
+    --c-warn-fg: CanvasText;
+    --c-spec: CanvasText;
+  }
+}
+
+@media (max-width: 40rem) {
+  :root {
+    --spec-h: 40px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration: 0ms;
+  }
+}

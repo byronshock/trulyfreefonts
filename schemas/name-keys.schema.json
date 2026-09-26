@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://trulyfreefonts.com/schemas/name-keys/1",
+  "title": "Name-key test vectors",
+  "description": "tests/vectors/name-keys.json: the vectors that tff_catalog.keys (Python) and site/js/05-keys.js (JavaScript) must both reproduce, and Milestone 3's matching reuses.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["format", "version", "unicode_max", "spec", "cases"],
+  "properties": {
+    "format": {"const": "tff-name-keys"},
+    "version": {"const": 1},
+    "unicode_max": {
+      "description": "The newest Unicode version any input needs; runtimes with older tables must skip.",
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+(\\.[0-9]+)?$"
+    },
+    "spec": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["match_key", "search_key", "drop_codepoints", "casefold_extra"],
+      "properties": {
+        "match_key": {"$ref": "#/$defs/steps"},
+        "search_key": {"$ref": "#/$defs/steps"},
+        "drop_codepoints": {
+          "description": "Hex code points or inclusive ranges that match_key removes.",
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^[0-9A-F]{4,6}(-[0-9A-F]{4,6})?$"
+          }
+        },
+        "casefold_extra": {
+          "description": "Every code point that can appear after NFKC whose Python casefold differs from toLowerCase() with ß to ss and ς to σ, mapped to its casefold (hex code points, space-separated). A JavaScript casefold uses this table, then toLowerCase() for everything else.",
+          "type": "object",
+          "minProperties": 1,
+          "propertyNames": {"pattern": "^[0-9A-F]{4,6}$"},
+          "additionalProperties": {"type": "string", "pattern": "^[0-9A-F]{4,6}( [0-9A-F]{4,6})*$"}
+        }
+      }
+    },
+    "cases": {
+      "type": "array",
+      "minItems": 40,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["input", "match_key", "search_key"],
+        "properties": {
+          "input": {"type": "string"},
+          "match_key": {"type": "string"},
+          "search_key": {"type": "string"},
+          "note": {"type": "string", "minLength": 1}
+        }
+      }
+    }
+  },
+  "$defs": {
+    "steps": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"type": "string", "minLength": 1}
+    }
+  }
+}

@@ -1,0 +1,179 @@
+# Site wording that stage "export-site" copies into build/catalog-site.json
+# (schemas/catalog-site.schema.json). One home for every owner ruling on
+# wording, so both milestones read the same text. Loaded strictly by
+# tff_catalog.config into config_model.SiteConfig: unknown or missing keys fail.
+#
+# Not here: band labels ("101–250", "501+"), which export derives from
+# ranking.toml [display]; system labels for preinstalled systems, which come
+# from preinstalled.toml; and the enum labels in tff_site.data.
+
+schema = 1
+
+[data_license]                  # D17
+spdx = "CC-BY-SA-4.0"
+provisional = false             # gate T5 (a), owner ruling 2026-09-25: the license is final
+url = "https://creativecommons.org/licenses/by-sa/4.0/"
+
+# The rank selector, in order; the first is the default (M2-D1). Every rank key once.
+[[views]]
+key = "overall"
+label = "Overall"
+measures = "Desktop installs people chose and use in sites, code and apps, half each."
+
+[[views]]
+key = "desktop_chosen"
+label = "Desktop: most chosen"
+measures = "Fonts people install on purpose. Fonts that Linux systems install on their own are ranked on their other sources."
+
+[[views]]
+key = "desktop_installed"
+label = "Desktop: most installed"
+measures = "Fonts on the most computers, counting every install."
+
+[[views]]
+key = "project"
+label = "Used in projects"      # site ruling 2026-09-25 (data/reviews/site/2026-09-25.toml)
+measures = "Use in websites (55%), code (30%) and apps (15%)."  # gate M9 (b): fixed group shares
+
+[[views]]
+key = "coding"
+label = "Coding fonts"
+measures = "Monospace fonts, ranked by developers' installs and downloads."
+
+[[views]]
+key = "dev_apps"
+label = "Developers & apps"
+measures = "What builders choose: npm packages, projects that depend on them, and app frameworks."
+
+[[views]]
+key = "rising"
+label = "Rising (beta)"
+measures = "Fonts gaining share over the last 3 months."
+
+[tiers]                         # methodology §6
+A = "Firm: evidence from at least 2 kinds of source, and the rank is unlikely to move far."
+B = "Fair: the rank could move by about its own size."
+C = "Rough: thin or conflicting evidence."
+
+# License-class filter groups (D3), in filter order. licenses.toml's allowed
+# licenses name one of these ids as their group.
+[[license_classes]]
+id = "open-font"
+label = "Open font licenses (OFL, UFL, Bitstream Vera)"
+
+[[license_classes]]
+id = "permissive"
+label = "Permissive (Apache, MIT, BSD, CC0)"
+
+[[license_classes]]
+id = "attribution"
+label = "Attribution required (CC BY)"
+
+[[license_classes]]
+id = "freeware"                 # not in M2 gate Q4's recommended three: free-use grants that forbid redistributing; needs the owner's ruling
+label = "Other free-use grants"
+
+# Distributions whose package data can pull a font in (pulled_in_by systems).
+# Always Linux. An id that preinstalled.toml also uses must have the same label.
+[package_systems.arch]
+label = "Arch Linux"
+
+[package_systems.cachyos]
+label = "CachyOS"
+
+[package_systems.debian]
+label = "Debian"
+
+# Source credits, by engine source id (ranking.toml). Every enabled source needs
+# one. `license` is the credit line the site shows; `publish_rank` says whether
+# the terms let the page show each font's rank in the source.
+[sources.homebrew]
+name = "Homebrew cask installs"
+measures = "Font cask installs on macOS over 365 days"
+url = "https://formulae.brew.sh/analytics/"
+license = "No data license stated; counts may be published, with credit"  # gate T1 (a)
+publish_rank = true
+
+[sources.arch]
+name = "Arch Linux pkgstats"
+measures = "Share of Arch Linux systems with each font package, 12-month mean"
+url = "https://pkgstats.archlinux.de"
+license = "No data license stated; counts may be published, with credit"  # gate T1 (a)
+publish_rank = true
+
+[sources.debian]
+name = "Debian popularity contest"
+measures = "Installs reported by Debian-based systems"
+url = "https://popcon.debian.org"
+license = "MIT (Expat) or GPL-2.0-or-later, per Debian's web license"  # gate T1 (a)
+publish_rank = true
+
+[sources.github]
+name = "GitHub release downloads"
+measures = "Downloads of fonts whose main channel is GitHub releases"
+url = "https://docs.github.com/en/rest/releases"
+license = "Counts may be published, with credit (GitHub Terms of Service)"  # gate T1 (a)
+publish_rank = true
+
+[sources.nerd]
+name = "Nerd Fonts release downloads"
+measures = "Patched-build downloads, credited to the original font"
+url = "https://github.com/ryanoasis/nerd-fonts/releases"
+license = "Counts may be published, with credit (GitHub Terms of Service)"  # gate T1 (a)
+publish_rank = true
+
+[sources.fot]
+name = "Fonts Over Time"
+measures = "Fonts used on about 10,000 homepages"
+url = "https://fontsovertime.com"
+license = "Used with credit and a link back, as its data page asks; only ranks are published"  # gate T4 (a)
+publish_rank = true
+
+[sources.almanac]
+name = "Web Almanac 2025"
+measures = "Pages declaring each font, top 100 families"
+url = "https://almanac.httparchive.org"
+license = "Apache-2.0"          # gate T1 (a)
+publish_rank = true
+
+[sources.google]
+name = "Google Fonts views"
+measures = "Views served by Google Fonts over one year"
+url = "https://fonts.google.com"
+license = "Used for ranks only; view counts are not published (Google Terms of Service)"  # gate T2 (a)
+publish_rank = true
+
+[sources.npm_fontsource]
+name = "npm downloads of Fontsource packages"
+measures = "Downloads of @fontsource and @fontsource-variable packages over one year"
+url = "https://www.npmjs.com/org/fontsource"
+license = "No data license stated; counts may be published, with credit"  # gate T1 (a)
+publish_rank = true
+
+[sources.ecosystems]
+name = "ecosyste.ms dependent repositories"
+measures = "GitHub projects that declare each Fontsource package"
+url = "https://packages.ecosyste.ms"
+license = "CC-BY-SA-4.0"        # gate T1 (a)
+publish_rank = true
+
+[sources.jsdelivr]
+name = "jsDelivr hits, through Fontsource"
+measures = "CDN requests for each Fontsource package"
+url = "https://www.jsdelivr.com"
+license = "No data license stated; counts may be published, with credit"  # gate T1 (a)
+publish_rank = true
+
+[sources.npm_expo]
+name = "npm downloads of Expo Google Fonts"
+measures = "Downloads of @expo-google-fonts packages over one year"
+url = "https://www.npmjs.com/org/expo-google-fonts"
+license = "No data license stated; counts may be published, with credit"  # gate T1 (a)
+publish_rank = true
+
+[sources.flutter]               # off in the first build
+name = "Flutter code search"
+measures = "Uses of GoogleFonts.<name> in public Flutter code"
+url = "https://pub.dev/packages/google_fonts"
+license = "Terms under review"  # no ruling yet
+publish_rank = false
