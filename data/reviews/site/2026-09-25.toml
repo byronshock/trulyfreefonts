@@ -1,0 +1,17 @@
+# Owner rulings on site wording (Milestone 2).
+# Ruled by the owner, Byron Shock, in chat on 2026-09-25. Recorded by Claude the same day.
+# Also recorded in AUTHORITY.md (Site (Milestone 2)) and applied in docs/milestone-2.md (step 3)
+# and docs/ranking-methodology.md (§1 and D13).
+# Each ruling: the value chosen; ruling = what it means; reason = Claude's summary of why.
+# The owner gave no reasons, so no reason here is the owner's words.
+
+[spacing_filter]
+label = "Spacing"
+options = ["Any", "Proportional", "Monospaced"]
+ruling = "Replaces D13's 'Text only' filter and the 'monospace only' checkbox in Milestone 2 step 3. Proportional is the old 'Text only': it hides monospace and coding fonts. It applies to every rank."
+reason = "One three-way control covers both old filters, which were two halves of the same choice and could contradict each other."
+
+[project_rank_label]
+value = "Used in projects"
+ruling = "On the site, the Project rank (D10) is labelled 'Used in projects'."
+reason = "A plain label for what the rank measures: fonts used in websites, code and apps."

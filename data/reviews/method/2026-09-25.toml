@@ -1,0 +1,79 @@
+# Owner rulings, gate M: method clarifications for Milestone 1.
+# Ruled by the owner, Byron Shock, in chat on 2026-09-25. Recorded by Claude the same day.
+# Also recorded in AUTHORITY.md (Ranking: "Method clarifications") and applied in
+# docs/ranking-methodology.md (§2, §4, §5, §6, §8) and docs/milestone-1.md.
+# Each ruling: choice = the option picked; recommended = whether it was Claude's recommended
+# option; ruling = what it means; reason = Claude's summary of why. The owner picked the
+# options and gave no reasons, so no reason here is the owner's words.
+
+[M1]
+choice = "a"
+recommended = true
+ruling = "Keep the outlier guard (gap 1.5 z, at least 3 terms, weight × 0.5). The worked example is corrected: JetBrains Mono scores 2.53, because the guard fires on Debian."
+reason = "The example had been computed with the guard off; Debian's 1.59 sits 1.53 z from the mean of the other two terms."
+
+[M2]
+choice = "a"
+recommended = true
+ruling = "GitHub: all releases of main-channel repos, measured as growth between snapshots, with no 24-month cap. Iosevka: the latest 24 releases, through GraphQL."
+reason = "Old releases still dominate; a 24-month cap by date would drop FiraCode (2021) and JetBrains Mono (2023) entirely."
+
+[M3]
+choice = "a"
+recommended = true
+ruling = "Homebrew: a separate floor for Nerd casks each run, the 10th percentile of Nerd casks' 365-day installs (about 2,150 a year), subtracted before nerd_credit."
+reason = "Nerd casks share a bulk-install floor; the flat 20 a year would credit about 2,150 phantom installs to each patched original."
+
+[M4]
+choice = "a"
+recommended = true
+ruling = "Arch nerd-fonts group floor: the 10th-percentile share of members that have been in the group for at least 6 months. Newer members are not floored."
+reason = "The floor depends on when a package joined; new members sit at 0.05–0.08%, so a flat 5.6% would censor them all."
+
+[M5]
+choice = "a"
+recommended = true
+ruling = "GitHub counters and Homebrew are one independence group for a font when its Homebrew cask downloads that repo's release asset."
+reason = "GitHub's download counts include those cask installs, so the two are not independent evidence."
+
+[M6]
+choice = "a"
+recommended = true
+ruling = "Almanac: the pages tab (gid 1668708562) is the term. The services tab (gid 1594814478) only flags parent merges."
+reason = "The pages tab measures what the method describes; the services tab names families from the font files, which shows where cuts were merged."
+
+[M7]
+choice = "a"
+recommended = true
+ruling = "ecosyste.ms covers @fontsource and @fontsource-variable only."
+reason = "Keeps ecosyste.ms in the code group, where D10 puts it; Expo is measured in the apps group."
+
+[M8]
+choice = "a"
+recommended = true
+ruling = "Dependency abstention: the largest single dependent brings in at least 50% of installs. In `a | b`, the first alternative is credited. 35–50% is flagged for review."
+reason = "Matches the method's 'top reverse dependency'; apt installs the first alternative by default."
+
+[M9]
+choice = "b"
+recommended = false
+ruling = "Project group shares stay fixed at web 0.55, code 0.30, apps 0.15. Within a group, sources share the group's weight pro rata to their effective weights (after phase-in, overlap scaling, stale drops and sources switched off)."
+reason = "Effect (the owner gave no reason): it keeps D10's 55/30/15 split at all times. Under the recommended raw weights (a), web would drop to 0.40 while Fonts Over Time phases in."
+
+[M10]
+choice = "a"
+recommended = true
+ruling = "Developers & apps view (dev_apps): the project weights, rescaled. npm 0.15, ecosyste.ms 0.10, Expo 0.10, and Flutter 0.05 when it is on."
+reason = "Keeps the project rank's relative weights, so there are no new numbers to tune."
+
+[M11]
+choice = "a"
+recommended = true
+ruling = "Top-100 membership hysteresis: a font enters at 90 or better and leaves after 2 runs worse than 110."
+reason = "Stops fonts near 100 flipping in and out each month, as the 450/550 rule does for the top 500."
+
+[M12]
+choice = "a"
+recommended = true
+ruling = "Foundry families: a hand list in config/foundries.toml, seeded once by Claude from the foundry sites. The owner reviews it with the step 2 config (gate C)."
+reason = "A handful of small foundries change rarely; scraping their sites every month would be fragile."
