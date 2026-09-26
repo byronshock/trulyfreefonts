@@ -88,6 +88,7 @@ Answers to the Milestone 2, Step 0 decisions in `docs/milestone-2.md` ([pull req
 ## Funding
 
 - A donation button on the site, and nothing more: no donation strategy or fundraising work. By the owner's reckoning the site costs nothing except their time. *(2026-09-25)*
+- **Provider.** A Stripe Payment Link where visitors choose the amount, with $5 suggested. No code and no Ko-fi. The link goes on the site with the intermediate release (the filterable list), not on the current stub. Checklist in [ops/DONATIONS.md](ops/DONATIONS.md). *(2026-09-25)*
 
 ## Current step
 
