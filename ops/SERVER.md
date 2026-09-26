@@ -76,6 +76,11 @@ The API token can't reach these two settings: its calls to Bot Management and We
   3. On the same list, check that **AI Labyrinth** (it adds hidden links to pages) and **Set your preference to block training in robots.txt** are Off; both are off by default. If there is a **Precursor** card (it injects a script, and may not exist on Free), check that it is Off too; clear the filter to see it. Leave the AI bot policies (Search, Agent, Training) as they are, but tell Claude what they say and whether a robots.txt sync option is on, since that would add lines to the site's own `robots.txt` in Milestone 2.
   4. Switch to `trulyfreefonts.org` and repeat steps 1–3, then do the same for `trulyfreefonts.net`.
 
+### H. Cache Rule for hashed assets (Byron, then Claude)
+Hashed files under `/assets/` never change, so Cloudflare may cache them for a year. Cloudflare doesn't cache JSON or HTML by default, and the API token can't create Cache Rules yet. HTML stays uncached (M2-D11 (a)).
+- [ ] 22. **Byron: add the Cache Rules permission to the token.** Cloudflare dashboard → profile icon → **My Profile** → **API Tokens** → **trulyfreefonts-mgmt** → **⋯** → **Edit** → **Permissions** → **+ Add more**: **Zone** · **Cache Rules** · **Edit**. Leave Zone Resources as they are, then **Continue to summary** → **Update token**. The token value stays the same. Tell Claude when it's done.
+- [ ] 23. **Claude: create the rule on `trulyfreefonts.com`** through the API (phase `http_request_cache_settings`): "URI path starts with `/assets/`": eligible for cache, edge TTL from the origin's Cache-Control. Record the ruleset id here. (Milestone 2 step 11.)
+
 ## Verification
 - `ssh tff sudo -n true` works; `ssh root@<IP>` and `ssh -o PubkeyAuthentication=no tff` are refused.
 - `ssh tff 'sudo ufw status verbose; systemctl is-active caddy fail2ban unattended-upgrades'` is all active.
