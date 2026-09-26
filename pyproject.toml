@@ -1,0 +1,88 @@
+[project]
+name = "tff-catalog"
+version = "0.1.0"
+description = "Ranked catalog of truly free Latin fonts, and the trulyfreefonts.com site"
+readme = "README.md"
+authors = [{ name = "Byron Shock" }]
+requires-python = ">=3.14"
+license = "MIT"
+license-files = ["LICENSE"]
+dependencies = [
+  "httpx>=0.28.1,<0.29",
+  "fonttools>=4.66.0",
+  "brotli>=1.2.0",            # fontTools WOFF2 reading
+  "numpy>=2.5.3",             # Dirichlet draws, percentiles
+  "jsonschema>=4.26.0",
+  "protobuf>=7.36.2,<8",      # verified: 7.36.2 + gfmetadata 0.2.5 parse METADATA.pb
+  "gfmetadata>=0.2.5",
+  "pyyaml>=6.0.3",            # Fontist formulas
+  "uharfbuzz>=0.56.2",        # M2 specimens (abi3 wheel)
+  "jinja2>=3.1.6",            # M2 templates
+  "markdown-it-py>=4.2.0",    # M2 /methodology from docs
+  "mdit-py-plugins>=0.6.1",   # M2 heading anchors
+]
+
+[project.urls]
+Homepage = "https://trulyfreefonts.com"
+Repository = "https://github.com/byronshock/trulyfreefonts"
+
+[project.scripts]
+tff-catalog = "tff_catalog.cli:main"
+tff-site = "tff_site.cli:main"
+
+[dependency-groups]
+dev = [
+  "ruff>=0.16.9",
+  "pytest>=9.1.1",
+  "hypothesis>=6.168.1",
+  "pytest-xdist>=3.8.0",
+  "pytest-timeout>=2.4.0",
+]
+browser = [
+  "playwright>=1.63.0",
+  "pytest-playwright>=0.9.0",
+  "axe-playwright-python>=0.1.8",
+]
+
+[build-system]
+requires = ["uv_build>=0.12,<0.13"]
+build-backend = "uv_build"
+
+[tool.uv]
+default-groups = ["dev"]      # site CI: uv sync --locked --group browser
+
+[tool.uv.build-backend]
+module-name = ["tff_catalog", "tff_site"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py314"
+src = ["src", "tests"]
+extend-exclude = ["build", "site/static"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "SIM", "C4", "RUF", "PTH", "DTZ", "TID", "PT", "PERF"]
+ignore = ["E501"]
+
+[tool.ruff.lint.per-file-ignores]
+"src/tff_catalog/clock.py" = ["DTZ"]
+"tests/**" = ["DTZ", "PLR2004"]
+
+[tool.ruff.lint.flake8-tidy-imports.banned-api]
+"urllib.request".msg = "Use tff_catalog.fetch.Fetcher (UA, rate limits, retries)."
+"requests".msg = "Not a dependency; use tff_catalog.fetch.Fetcher."
+"random".msg = "Use numpy.random.default_rng(ranking.toml [uncertainty].seed)."
+
+[tool.ruff.format]
+quote-style = "double"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = ["--import-mode=importlib", "-ra", "--strict-markers", "-p", "no:cacheprovider"]
+markers = [
+  "network: real network (deselected in CI)",
+  "store: needs $TFF_STORE",
+  "browser: Playwright",
+  "slow",
+]
+timeout = 300
