@@ -5,7 +5,7 @@ Milestone 2 replaces the stub on trulyfreefonts.com with Milestone 1's ranked, f
 **How to read each step:**
 
 - **Who:** the owner, Claude, or both.
-- **Depends on:** the steps that must finish first. "M1 step N" is in [milestone-1.md](milestone-1.md), D1–D17 are in [ranking-methodology.md](ranking-methodology.md), and M2-D1 to M2-D11 are under [Decisions](#decisions).
+- **Depends on:** the steps that must finish first. "M1 step N" is in [milestone-1.md](milestone-1.md), D1–D17 are in [ranking-methodology.md](ranking-methodology.md), and M2-D1 to M2-D12 are under [Decisions](#decisions).
 - **Done when:** what must be true before the step is ticked.
 - **Parallel:** where Claude can run several agents at once.
 
@@ -15,13 +15,13 @@ Tick each item as soon as it is done and verified. If an item is only partly don
 - trulyfreefonts.com serves the filterable list from the latest merged `catalog-site.json`, and the stub is gone;
 - every font shows its linked license, official download link, ranks with tiers, per-source ranks and tags;
 - "Redistributable fonts only" works as Rule 3 says;
-- the methodology, privacy and about pages are live, and the tip link passes the checks in [ops/DONATIONS.md](../ops/DONATIONS.md);
+- the methodology, privacy and about pages are live, the blog builds and deploys with the site (M2-D12), and the tip link passes the checks in [ops/DONATIONS.md](../ops/DONATIONS.md);
 - the live privacy test passes: no request to another site, no cookie, nothing stored in the browser, the CSP enforced, no Cloudflare error-report headers;
 - the WCAG 2.2 AA check is clean and the performance budget is met;
 - a monthly refresh has reached the live site through the chosen deploy path;
 - usability rounds 1 and 2 are done, with no blocker or major finding open;
 - nothing has been announced (that is Milestone 4);
-- AUTHORITY.md records M2-D1 to M2-D11, and the owner has accepted the handoff.
+- AUTHORITY.md records M2-D1 to M2-D12, and the owner has accepted the handoff.
 
 **Critical path:** 0 → 1 → 3 → 4 → 6 → 13 → 14 → 15 → 17. Steps 1–12 run on step 2's sample catalog while Milestone 1 is still building; steps 13–16 need its real data.
 
@@ -122,6 +122,20 @@ Tick each item as soon as it is done and verified. If an item is only partly don
 
 **Done when:** the owner has approved the text, the pages pass step 6's checks, and the credits match M1 step 3's terms ruling.
 
+### Step 7b: Blog
+**Who:** Claude builds it; the owner writes and approves posts. **Depends on:** 1, 6, 7 (`render_markdown`); M2-D12.
+- [ ] Each post is one file, `site/content/blog/<yyyy-mm-dd>-<slug>.md`, starting with YAML front matter: `title`, `date` and `description`, plus optional `updated` and `draft`. The build fails on a missing or unknown field, a repeated slug, or a slug that breaks the deploy's path rule (CONTRACT.md §2).
+- [ ] `tff-site build` writes `/blog/` (newest post first), `/blog/<slug>/` and an Atom feed at `/blog/feed.xml`, and adds the posts to `sitemap.xml`. Post text goes through step 7's `render_markdown`, with raw HTML off. Blog pages load no script.
+- [ ] Images sit beside their post and are published as immutable `/assets/blog/<slug>.<h>.<ext>` files. The build fails on an image with no alt text.
+- [ ] Dates come only from the front matter, never from file times or the build time, so the build stays byte-identical.
+- [ ] Posts marked `draft: true` are built only by `tff-site build --drafts`, which the staging deploy uses.
+- [ ] Until the first post is published, the build writes no `/blog/` pages and the nav has no Blog link.
+- [ ] License: `LICENSE-DATA`'s scope gains `site/content/blog/` (text and images), and each post page gives its license, CC BY-SA 4.0.
+- [ ] CONTRACT.md §2 (build output) and §3 (templates) are updated in the same pull request, with their contract tests.
+- [ ] Tests: an offline Atom check on the feed, plus step 6's axe run and step 9's privacy test on `/blog/` and one post.
+
+**Done when:** a sample post builds, passes step 6's and step 9's checks on the test site, and its feed passes the Atom check.
+
 ### Step 8: Tip link
 **Who:** Claude. **Depends on:** 1. [ops/DONATIONS.md](../ops/DONATIONS.md) steps 1–10 are done; the live link is in its Facts table (2026-09-25).
 - [ ] Do DONATIONS.md step 11, ticking it there: one plain link, no Stripe script or cookies, after the results and in the footer, called a tip, not a donation.
@@ -204,7 +218,7 @@ Tick each item as soon as it is done and verified. If an item is only partly don
 **Parallel:** Claude writes up each session while the next is scheduled.
 
 ### Step 14: Soft launch: the list replaces the stub
-**Who:** Claude deploys; the owner gives the go-ahead. **Depends on:** 6, 8, 9, 10, 11, 13; M2-D8; M1 step 20 (`catalog-site.json` v1 frozen from a merged refresh). Launching without the tip link needs an owner ruling in AUTHORITY.md, whose Funding section ties the link to this release.
+**Who:** Claude deploys; the owner gives the go-ahead. **Depends on:** 6, 7b, 8, 9, 10, 11, 13; M2-D8; M1 step 20 (`catalog-site.json` v1 frozen from a merged refresh). Launching without the tip link needs an owner ruling in AUTHORITY.md, whose Funding section ties the link to this release.
 - [ ] Final checks on the test site: all CI checks, step 9's live test, step 10's numbers, the tip link.
 - [ ] The page says it is an early version and that hiding the fonts you have is coming.
 - [ ] Deploy to production, and remove the stub from `public/` in the repository.
@@ -235,7 +249,7 @@ Tick each item as soon as it is done and verified. If an item is only partly don
 
 ### Step 17: Record decisions and hand off to Milestones 3 and 4
 **Who:** both. **Depends on:** 15, 16.
-- [ ] AUTHORITY.md has dated entries for M2-D1 to M2-D11, including any that testing changed.
+- [ ] AUTHORITY.md has dated entries for M2-D1 to M2-D12, including any that testing changed.
 - [ ] SERVER.md covers the deploy, test site, headers and Cloudflare settings.
 - [ ] Handoff note for Milestone 3: the aliases and step 3's `search_key` vectors; `connect-src 'self'` stays, since matching runs on the device; `local-fonts` stays off except on `/check/` (M3 step 6); the specimen loader's pause (step 5); the test site; and what rounds 2 and 3 learned about pasting a command's output.
 - [ ] Handoff note for Milestone 4: the usage baseline, open issues, what must be done before the announcement, the deploy path (M2-D6) to revisit at the two-month review, and the caching choice (M2-D11) with the outage result M4 step 4 should expect.
@@ -264,3 +278,4 @@ Defaults are in bold. A **[Step 0]** decision is answered before building starts
 | **M2-D9 (decided 2026-09-25): server logs.** Recorded in AUTHORITY.md (Infrastructure) and [ops/SERVER.md](../ops/SERVER.md) section F. Binding on later milestones: M4 step 3 checks the log against it, and any count Milestone 4 takes from the log runs within 14 days. | Caddy masks visitor IPs to /16 (IPv4) and /32 (IPv6) and drops the port and the `Cf-Connecting-Ip` and `X-Forwarded-For` headers; Caddy's rolling is off, and logrotate keeps 14 days, rotated daily (`ops/Caddyfile`, `ops/logrotate-caddy`). Usage totals come from Cloudflare. |
 | **M2-D10 [later OK]: feedback channels** | **(a) GitHub issue forms plus an email link to the site's `admin@` address** for people without GitHub (expect some spam); (b) issues only; (c) email only. |
 | **M2-D11 [later OK]: caching pages at Cloudflare.** Hashed assets are cached either way; M4 step 4 verifies the choice and records its outage test as the expected result. | **(a) HTML not edge-cached:** no purges or purge permission, but while the server is down visitors see Cloudflare's error page (not customizable on the Free plan); (b) HTML edge-cached and purged after each deploy (step 11), so pages survive a short outage. |
+| **M2-D12 (decided 2026-09-25): blog** (step 7b) | **Markdown posts built by `tff-site`**, with no separate engine; the other options were Zola or Hugo. **Ships with the list release**, not with Milestone 4. **At `/blog/`**, with an Atom feed; `/notes/` and `/news/` were the other options. **Post text under CC BY-SA 4.0**, like the data; CC BY 4.0 and all rights reserved were the other options. |
