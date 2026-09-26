@@ -32,7 +32,7 @@ Tick each item as soon as it is done and verified. If an item is only partly don
   - D15 snapshots: private data repository;
   - D17 licenses: MIT code; CC BY-SA 4.0 data, provisional until step 3.
 - [x] If D12 is (a), the owner names 3–5 designer lists (with URLs); otherwise designer picks are set to 0. *(D12 is usage only: designer picks are 0.)*
-- [ ] Claude records each answer in AUTHORITY.md with its date. *(Partly done: D8 recorded.)*
+- [x] Claude records each answer in AUTHORITY.md with its date. *(All eleven recorded 2026-09-25.)*
 - [x] Claude updates the stale lines in PLAN.md, which stays local and untracked:
   - "reciprocal-rank fusion";
   - "publishes by rsync";
