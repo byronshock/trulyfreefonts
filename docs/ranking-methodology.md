@@ -1,6 +1,6 @@
 # Ranking methodology
 
-**Status: proposal for Milestone 1, Step 0** (drafted 2026-09-25). Every Step 0 decision was answered on 2026-09-25 and is marked *decided*; the document as a whole is approved when pull request #1 merges. Approved choices are recorded in [AUTHORITY.md](../AUTHORITY.md), and the checklist is in [milestone-1.md](milestone-1.md).
+**Status: approved 2026-09-25** (Milestone 1, Step 0, pull request #1). Every Step 0 decision is marked *decided*. Approved choices are recorded in [AUTHORITY.md](../AUTHORITY.md), and the checklist is in [milestone-1.md](milestone-1.md).
 
 Every number is a default in `config/ranking.toml`, which the owner can edit. There are two kinds of decision:
 
