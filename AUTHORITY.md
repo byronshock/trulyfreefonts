@@ -21,7 +21,7 @@ Compare the fonts a user already has installed with a ranked list of the most po
 
 ## Ranking
 
-Answers to the Milestone 1, Step 0 decisions in [docs/ranking-methodology.md](docs/ranking-methodology.md) (under review in [pull request #1](https://github.com/byronshock/trulyfreefonts/pull/1)).
+Answers to the Milestone 1, Step 0 decisions in [docs/ranking-methodology.md](docs/ranking-methodology.md) (approved 2026-09-25 in [pull request #1](https://github.com/byronshock/trulyfreefonts/pull/1)).
 
 - **D8: automatically installed fonts.** Fonts that Linux systems preinstall or pull in as dependencies of other packages stay in the rankings. The desktop rank is published as two views:
   - **most chosen:** a Linux source is left out for any font that a Linux system preinstalls or that other packages mostly pull in (threshold in the methodology); the font is still ranked on its other sources;
@@ -44,6 +44,15 @@ Answers to the Milestone 1, Step 0 decisions in [docs/ranking-methodology.md](do
 - **D14: evidence gate.** A top-100 place needs evidence from at least 2 independent source groups, plus a mild pull of thin evidence toward the middle (κ 0.2). *(2026-09-25)*
 - **D15: snapshots.** Monthly data extracts live in a private GitHub data repository, reached with a deploy key or GitHub App. *(2026-09-25)*
 - **D17: licenses.** The code is MIT. The catalog data is CC BY-SA 4.0, provisional until the Milestone 1 step 3 audit of each source's terms. *(2026-09-25)*
+
+## Site (Milestone 2)
+
+Answers to the Milestone 2, Step 0 decisions in `docs/milestone-2.md` ([pull request #2](https://github.com/byronshock/trulyfreefonts/pull/2)).
+
+- **M2-D1: default rank.** The list opens on the **overall** rank. *(2026-09-25)*
+- **M2-D2: numbers under filters.** Each filtered list renumbers from 1. Fonts past the exact top 100 show their band instead of a number. *(2026-09-25)*
+- **M2-D3: page technology.** Plain HTML, CSS and one script, with no framework, built by a Python command in the same project as the catalog. *(2026-09-25)*
+- **M2-D9: server logs.** See Infrastructure, visitor privacy on the server. *(2026-09-25)*
 
 ## Infrastructure
 
@@ -75,7 +84,8 @@ Answers to the Milestone 1, Step 0 decisions in [docs/ranking-methodology.md](do
 ## Current step
 
 1. Survey the tools that already exist for this, or for parts of it. *(done 2026-09-25; findings in [docs/prior-art.md](docs/prior-art.md))*
-2. Milestone 1, Step 0: the owner reviews the ranking methodology proposal and checklist in [pull request #1](https://github.com/byronshock/trulyfreefonts/pull/1). *(2026-09-25)*
+2. Milestone 1: Step 0 is done; the methodology was approved and merged on 2026-09-25 ([docs/milestone-1.md](docs/milestone-1.md)). Next is Step 1, project setup.
+3. Milestone 2, Step 0: decisions are in progress in [pull request #2](https://github.com/byronshock/trulyfreefonts/pull/2); M2-D1 to M2-D3 are answered. *(2026-09-25)*
 
 ## Background
 
