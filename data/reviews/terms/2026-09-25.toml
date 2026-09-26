@@ -1,0 +1,38 @@
+# Owner rulings, gate T: the terms of each data source (Milestone 1, step 3).
+# Ruled by the owner, Byron Shock, in chat on 2026-09-25. Recorded by Claude the same day.
+# Also recorded in AUTHORITY.md (Ranking: "Terms rulings" and D17), docs/ranking-methodology.md
+# (§3, §5 including D11, §6 including D14, D15 and D17, §7, §11), LICENSE-DATA and README.md
+# (Source credits). The full per-source table goes in docs/sources.md.
+# Each ruling: choice = the option picked; recommended = whether it was Claude's recommended
+# option; ruling = what it means; reason = Claude's summary of why. The owner picked the
+# options and gave no reasons, so no reason here is the owner's words.
+
+[T1]
+choice = "a"
+recommended = true
+ruling = "Open sources (Homebrew, pkgstats, Arch and Debian package data, popcon, npm, Fontsource and jsDelivr, GitHub counts, the Web Almanac under Apache-2.0, ecosyste.ms under CC BY-SA 4.0, Nerd Fonts fonts.json under MIT): raw counts may be published. The public repo may hold small, trimmed real fixtures with credit notices."
+reason = "Their data is openly licensed, or no terms restrict reusing the counts; the notices keep the credit."
+
+[T2]
+choice = "a"
+recommended = true
+ruling = "Google /metadata/fonts and /metadata/stats are used. Only ranks and z scores are published, never view counts. Public fixtures are synthetic; real data stays in the private store."
+reason = "The endpoints are undocumented, and Google's terms grant no right to republish the values."
+
+[T3]
+choice = "a"
+recommended = true
+ruling = "Chocolatey is dropped from v1. Methodology §11 notes the thinner Windows coverage."
+reason = "Its terms (3 June 2026) forbid scripted access and republishing without written permission."
+
+[T4]
+choice = "a"
+recommended = true
+ruling = "Fonts Over Time is used as D11's default says: at the phase-in weight of 0.10, with credit and a link back, ranks only (ranks and their rank-based z scores, never raw values), synthetic fixtures. Claude drafts the license request; the owner posts it."
+reason = "Its data page says the data is free to download and reuse and asks for a link back, but the repository has no license file."
+
+[T5]
+choice = "a"
+recommended = true
+ruling = "The catalog data license, CC BY-SA 4.0, is final and no longer provisional. D17 is updated."
+reason = "ecosyste.ms data is CC BY-SA 4.0, and its ShareAlike term calls for the same license; T1 to T4 leave nothing that needs another one."

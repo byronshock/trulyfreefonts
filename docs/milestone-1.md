@@ -30,7 +30,7 @@ Tick each item as soon as it is done and verified. If an item is only partly don
   - D13 extra views: all four;
   - D14 evidence gate: two groups plus κ 0.2;
   - D15 snapshots: private data repository;
-  - D17 licenses: MIT code; CC BY-SA 4.0 data, provisional until step 3.
+  - D17 licenses: MIT code; CC BY-SA 4.0 data, provisional until step 3. *(made final 2026-09-25, ruling T5)*
 - [x] If D12 is (a), the owner names 3–5 designer lists (with URLs); otherwise designer picks are set to 0. *(D12 is usage only: designer picks are 0.)*
 - [x] Claude records each answer in AUTHORITY.md with its date. *(All eleven recorded 2026-09-25.)*
 - [x] Claude updates the stale lines in PLAN.md, which stays local and untracked:
@@ -42,7 +42,7 @@ Tick each item as soon as it is done and verified. If an item is only partly don
 **Done when:** no [Step 0] decision is open, and AUTHORITY.md and both docs are merged to `main`.
 
 ### Step 1: Project setup
-**Who:** Claude; the owner turns on branch protection. **Depends on:** D17 from step 0; the rest can start during step 0.
+**Who:** Claude, including branch protection with gh (owner-approved 2026-09-25). **Depends on:** D17 from step 0; the rest can start during step 0.
 - [x] A uv project on Python 3.14:
   - `pyproject.toml`, `src/tff_catalog/`, `tests/`, and a CLI named `tff-catalog`;
   - dependencies httpx, fonttools, numpy and jsonschema (tomllib is built in);
@@ -52,10 +52,10 @@ Tick each item as soon as it is done and verified. If an item is only partly don
   - `data/`: `aliases.csv`, `reviews/` (owner rulings);
   - `state/` (see step 3);
   - `build/`: `catalog.json`, `catalog-site.json`, `review.md`.
-- [x] `LICENSE` (MIT) for code and `LICENSE-DATA` (CC BY-SA 4.0) for the catalog, per D17. The data license is marked provisional.
+- [x] `LICENSE` (MIT) for code and `LICENSE-DATA` (CC BY-SA 4.0) for the catalog, per D17. The data license is marked provisional. *(Made final 2026-09-25 by ruling T5.)*
 - [x] A README with source credits.
-- [ ] CI on every pull request: `uv run ruff check`, `uv run pytest`, and a secret scan (gitleaks). *(`.github/workflows/ci.yml` has the `lint`, `test` and `secrets` jobs, and their commands pass locally; left: the first run on GitHub.)*
-- [ ] Owner: branch protection for `main` requiring the CI checks, with **0 required approvals**, because the owner can't approve their own pull requests.
+- [x] CI on every pull request: `uv run ruff check`, `uv run pytest`, and a secret scan (gitleaks). *(`.github/workflows/ci.yml` has the `lint`, `test` and `secrets` jobs; the first run on GitHub passed on [#6](https://github.com/byronshock/trulyfreefonts/pull/6).)*
+- [x] Claude, with gh (owner-approved 2026-09-25): branch protection for `main` requiring the CI checks, with **0 required approvals**, because the owner can't approve their own pull requests. *(Checks lint, test, secrets; 0 approvals.)*
 - [x] Confirm `.gitignore` still excludes `PLAN.md`, `ops/SERVER.local.md` and `.claude/settings.local.json`.
 
 **Done when:** a pull request with one trivial test passes CI, and both license files are on `main`.
@@ -73,10 +73,10 @@ Tick each item as soon as it is done and verified. If an item is only partly don
 
   Each entry names its system. Only Linux entries trigger abstentions; Windows, macOS and Android entries only add `preinstalled_on` tags.
   - the LibreOffice bundle.
-- [ ] `foundries.toml` lists League of Moveable Type, Velvetyne, Collletttivo, Open Foundry and Roundo.
+- [ ] `foundries.toml` is a hand list of the families of League of Moveable Type, Velvetyne, Collletttivo, Open Foundry and Roundo. Claude seeds it once from the foundry sites, and the owner reviews it with `preinstalled.toml`; the sites are not scraped each month (ruling M12).
 - [ ] `tff-catalog config` prints the effective config and its hash.
 
-**Done when:** the loader tests pass and the owner has reviewed `preinstalled.toml`.
+**Done when:** the loader tests pass and the owner has reviewed `preinstalled.toml` and `foundries.toml`.
 
 ### Step 3: Collector framework, snapshots, run state and source terms
 **Who:** Claude; the owner rules on the terms table and posts the Fonts Over Time request. **Depends on:** 1 and D15.
@@ -95,7 +95,7 @@ Tick each item as soon as it is done and verified. If an item is only partly don
   - a new run replaces an unmerged refresh pull request;
   - test: two runs without a merge give the same state as one run.
 - [ ] Stale-data policy: reuse the last snapshot for up to 2 months, flagged.
-- [ ] Terms audit, one row per source, recording whether raw values and fixtures may be republished. The result goes in `docs/sources.md`. Rows:
+- [ ] Terms audit, one row per source, recording whether raw values and fixtures may be republished. The result goes in `docs/sources.md`. *(Rulings T1–T5 given 2026-09-25, in `data/reviews/terms/`; `docs/sources.md` still to write.)* Rows:
   - Google's undocumented endpoints;
   - Fonts Over Time (no license file);
   - ecosyste.ms (data CC BY-SA 4.0, verified 2026-09-25);
@@ -107,7 +107,7 @@ Tick each item as soon as it is done and verified. If an item is only partly don
   - jsDelivr;
   - Chocolatey;
   - GitHub.
-- [ ] Claude drafts a request to the Fonts Over Time author for an explicit data license (for example CC BY 4.0); the owner posts it.
+- [ ] Claude drafts a request to the Fonts Over Time author for an explicit data license (for example CC BY 4.0); the owner posts it. *(Drafted 2026-09-25; waiting for the owner to post it.)*
 
 **Done when:**
 - fetching one real source twice leaves exactly one snapshot per date, with no duplicates;
@@ -188,7 +188,7 @@ Tick each item as soon as it is done and verified. If an item is only partly don
   - Nerd Fonts `fonts.json`, keeping one authoritative list of Nerd casks;
   - Homebrew `old_tokens` and `cask_renames`;
   - Arch and Debian package names;
-  - a hand-made table of about 60 Chocolatey ids;
+  - ~~a hand-made table of about 60 Chocolatey ids;~~ *(not needed: Chocolatey is dropped from v1, ruling T3)*
   - a GitHub repo-to-family table with a main-download-channel flag;
   - upstream name tables (Inter Variable, Inter Display).
 - [ ] Sibling rules that block false matches: Roboto ≠ Roboto Slab, Fira Sans ≠ Fira Code, Inter ≠ Inter Tight, Noto Sans ≠ Noto Sans JP.
@@ -207,14 +207,14 @@ Tick each item as soon as it is done and verified. If an item is only partly don
   - the CachyOS and EndeavourOS repository databases;
   - Debian `Packages.xz` and popcon `by_inst.gz`.
 - [ ] Debian popcon main/fonts.
-- [ ] GitHub releases for main-channel repos (a small `per_page` for Iosevka; at most 24 months), within a per-run GitHub API budget.
+- [ ] GitHub releases for main-channel repos: every release, with no cap by date, measured as growth between snapshots; for Iosevka, only the latest 24 releases, through GraphQL (ruling M2). All within a per-run GitHub API budget.
 - [ ] Nerd Fonts releases.
-- [ ] Chocolatey OData.
+- ~~Chocolatey OData.~~ *(Dropped from v1: its terms forbid automated access; ruling T3.)*
 - [ ] Fonts Over Time weekly JSONL and `latest.csv`, with a column check that marks the source stale on mismatch.
 - [ ] Web Almanac 2025 sheets: find the header row, validate the columns, and pin the sheet id and tabs per edition in config.
 - [ ] Google Fonts `/metadata/stats`, falling back to the popularity field.
 - [ ] npm `downloads/point/last-year` for @fontsource, @fontsource-variable and @expo-google-fonts packages above the floor, at most 1 request a second with backoff on 429.
-- [ ] ecosyste.ms dependent-repository counts for the same packages (packages.ecosyste.ms API), credited as CC BY-SA 4.0.
+- [ ] ecosyste.ms dependent-repository counts for the @fontsource and @fontsource-variable packages only (packages.ecosyste.ms API; ruling M7), credited as CC BY-SA 4.0.
 - [ ] Fontsource `/v1/stats` (jsDelivr).
 - [ ] Flutter code search: deferred until a token is chosen.
 
@@ -232,7 +232,7 @@ Tick each item as soon as it is done and verified. If an item is only partly don
 
 ### Step 10: Confound corrections
 **Who:** Claude; the owner reviews flagged preinstalled and dependency entries. **Depends on:** 8, 9.
-- [ ] For every rank except *most installed* (most chosen, overall, Coding): reverse-dependency abstentions (at 50% or more), plus abstentions for fonts a Linux system preinstalls. The *most installed* view keeps every count.
+- [ ] For every rank except *most installed* (most chosen, overall, Coding): reverse-dependency abstentions (the largest single dependent at 50% or more, with `a | b` credited to the first alternative and 35–50% flagged; ruling M8), plus abstentions for fonts a Linux system preinstalls. The *most installed* view keeps every count.
 - [ ] `preinstalled_on` and `pulled_in_by` tags for each affected font, used by both views.
 - [ ] Noise floors (Homebrew, the Arch Nerd Fonts group, Nerd release downloads), bundle, Nerd and CJK credits, and exposure counted from data dates.
 - [ ] A per-font correction report, with new cases flagged for the owner.
@@ -252,7 +252,7 @@ Tick each item as soon as it is done and verified. If an item is only partly don
   - determinism;
   - adding an ineligible font moves nothing;
   - a higher count never lowers a rank, except where the guard fires.
-- [ ] The worked example (2.48 / 2.15 / 1.98) as a fixture.
+- [ ] The worked example (2.53 / 2.15 / 1.98, with the outlier guard on; ruling M1) as a fixture.
 - [ ] Cross-checks: coverage-aware RRF (k=60) and the Fontsource ruler.
 
 **Done when:** the tests pass, and both desktop views and the project rank are produced from real data.
@@ -263,7 +263,7 @@ Tick each item as soon as it is done and verified. If an item is only partly don
 - [ ] Views: Desktop *most installed*, Coding, Developers & apps, categories, Rising (beta).
 - [ ] A test that changing any extra view's weights (Coding, Developers & apps, Rising) leaves the overall rank unchanged.
 - [ ] A leak test: changing a Linux source's count for a font that abstains in *most chosen* leaves the overall rank unchanged.
-- [ ] Catalog membership (the overall top 500 plus the top 100 of the project rank and of both desktop views), with hysteresis counters in `state/`.
+- [ ] Catalog membership (the overall top 500 plus the top 100 of the project rank and of both desktop views), with hysteresis counters in `state/`. For the top-100 lists, a font enters at 90 or better and leaves after 2 runs worse than 110 (ruling M11).
 
 **Done when:** every catalog candidate has every published rank it has evidence for; fonts unranked in *most chosen* only because of abstentions are listed with their tag.
 
