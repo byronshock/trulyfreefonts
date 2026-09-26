@@ -52,6 +52,10 @@ Answers to the Milestone 2, Step 0 decisions in `docs/milestone-2.md` ([pull req
 - **M2-D1: default rank.** The list opens on the **overall** rank. *(2026-09-25)*
 - **M2-D2: numbers under filters.** Each filtered list renumbers from 1. Fonts past the exact top 100 show their band instead of a number. *(2026-09-25)*
 - **M2-D3: page technology.** Plain HTML, CSS and one script, with no framework, built by a Python command in the same project as the catalog. *(2026-09-25)*
+- **M2-D4: filter layout.** Every filter sits in a sidebar on wide screens. On phones, everything but search and rank goes behind one "Filters" button. *(2026-09-25)*
+- **M2-D5: previews.** SVG specimens are drawn at each refresh. A "Type your own text" box loads the unchanged font file only when clicked. Only redistributable fonts get previews. *(2026-09-25)*
+- **M2-D6: deploy.** GitHub Actions deploys each push to `main` as a restricted `deploy` user, and a laptop script is the fallback. *(2026-09-25)*
+- **M2-D7: test site.** `staging.trulyfreefonts.com` is used for usability round 1 and reused by Milestone 3. *(2026-09-25)*
 - **M2-D9: server logs.** See Infrastructure, visitor privacy on the server. *(2026-09-25)*
 
 ## Infrastructure
@@ -85,7 +89,7 @@ Answers to the Milestone 2, Step 0 decisions in `docs/milestone-2.md` ([pull req
 
 1. Survey the tools that already exist for this, or for parts of it. *(done 2026-09-25; findings in [docs/prior-art.md](docs/prior-art.md))*
 2. Milestone 1: Step 0 is done; the methodology was approved and merged on 2026-09-25 ([docs/milestone-1.md](docs/milestone-1.md)). Next is Step 1, project setup.
-3. Milestone 2, Step 0: decisions are in progress in [pull request #2](https://github.com/byronshock/trulyfreefonts/pull/2); M2-D1 to M2-D3 are answered. *(2026-09-25)*
+3. Milestone 2, Step 0: all seven decisions are answered; the checklist awaits merging in [pull request #2](https://github.com/byronshock/trulyfreefonts/pull/2). *(2026-09-25)*
 
 ## Background
 
