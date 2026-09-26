@@ -83,7 +83,7 @@ Hashed files under `/assets/` never change, so Cloudflare may cache them for a y
 
 ### I. Cloudflare's text in robots.txt (Claude)
 On the Free plan, a zone whose origin has no `robots.txt`, and whose managed robots.txt is off, gets Cloudflare's **Content Signals Policy** served as its `robots.txt`: about 25 lines of legal comments. On 2026-09-26 `https://trulyfreefonts.com/robots.txt` served it, because the stub site had no `robots.txt`. Byron found Bot Preference Sync (managed robots.txt's current name) off on `.com`. Cloudflare's documented opt-out, **Display Content Signals Policy** in the zone Overview's **Control AI Crawlers** card, wasn't in the dashboard.
-- [ ] 24. **Serve our own `robots.txt`, so Cloudflare adds nothing.** `public/robots.txt` allows everything, the same as having no file (M2-D8 (a)). Deploy it, then check that the live file matches the repo's. The site's own `robots.txt` (Milestone 2 step 1) replaces it when the stub goes; a site without one would bring the Cloudflare text back.
+- [x] 24. **Serve our own `robots.txt`, so Cloudflare adds nothing.** *(Done 2026-09-26: deployed from `main` at the merge of #16. `https://trulyfreefonts.com/robots.txt` matches `public/robots.txt`, with no Cloudflare text; `www.`, `.org` and `.net` 301 to it.)* `public/robots.txt` allows everything, the same as having no file (M2-D8 (a)). Deploy it, then check that the live file matches the repo's. The site's own `robots.txt` (Milestone 2 step 1) replaces it when the stub goes; a site without one would bring the Cloudflare text back.
 
 ## Verification
 - `ssh tff sudo -n true` works; `ssh root@<IP>` and `ssh -o PubkeyAuthentication=no tff` are refused.
