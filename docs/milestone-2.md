@@ -48,9 +48,9 @@ Tick each item as soon as it is done and verified. If an item is only partly don
 
 ### Step 2: Approve the site data and build a sample
 **Who:** Claude; the owner approves. **Depends on:** 0; runs alongside step 1. M1 step 20 freezes `catalog-site.json` v1 only after this approval.
-- [ ] The owner approves the `catalog-site.json` fields M1 step 15 lists for this milestone: aliases, per-source states, ranges, flags, designer lists, `preview` and run metadata.
+- [x] The owner approves the `catalog-site.json` fields M1 step 15 lists for this milestone: aliases, per-source states, ranges, flags, designer lists, `preview` and run metadata. *(Approved as drafted 2026-09-25, in `schemas/catalog-site.schema.json`; designer lists are dropped because D12 is usage only. License filter: four groups.)*
 - [ ] If step 10's budget requires it, per-source data moves to `catalog-details.json`, fetched when a details panel first opens.
-- [ ] `tests/fixtures/catalog-site.sample.json`, the sample M1 step 20 freezes with v1: about 40 labelled-synthetic fonts covering ranks and bands, tiers A–C, no deliberate-install evidence, not redistributable, attribution required, limited accents, each system's preinstalls, a package dependency, no preview, a very long name, and a font found only by alias.
+- [x] `tests/fixtures/catalog-site.sample.json`, the sample M1 step 20 freezes with v1: about 40 labelled-synthetic fonts covering ranks and bands, tiers A–C, no deliberate-install evidence, not redistributable, attribution required, limited accents, each system's preinstalls, a package dependency, no preview, a very long name, and a font found only by alias. *(Done 2026-09-25 in [pull request #8](https://github.com/byronshock/trulyfreefonts/pull/8): 40 fonts; it validates against the draft schema.)*
 
 **Done when:** the owner has approved the fields, and the sample passes M1 step 15's schema (a draft until that step lands).
 
