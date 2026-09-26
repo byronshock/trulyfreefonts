@@ -29,10 +29,10 @@ Tick each item as soon as it is done and verified. If an item is only partly don
 
 ### Step 0: Owner reviews this checklist
 **Who:** owner; Claude answers questions and makes edits. **Depends on:** nothing; it can run during Milestone 1. Only M2-D5 (d) waits on a Milestone 1 decision (D3).
-- [ ] Claude opens a pull request adding this checklist.
+- [x] Claude opens a pull request adding this checklist. ([#2](https://github.com/byronshock/trulyfreefonts/pull/2))
 - [x] The owner answers the seven **[Step 0]** decisions (M2-D1 to M2-D7) *(all answered 2026-09-25; [later OK] defaults kept)* and changes any **[later OK]** default (M2-D8, M2-D10, M2-D11); M2-D9 was decided on 2026-09-25. With step 7, they cover M1 step 20's handoff list.
-- [ ] *(Partly done: every answer recorded in AUTHORITY.md on 2026-09-25; the Tracked docs entries wait for the merge and for step 12's file.)* Claude records each answer in AUTHORITY.md with its date, adds `docs/milestone-2.md`, `docs/usability-test.md` (step 12) and, if not yet listed, `docs/roadmap.md` to "Tracked docs", and updates PLAN.md's Milestone 2 line if needed.
-- [ ] The owner merges the pull request.
+- [ ] *(Partly done 2026-09-25: every answer recorded; `docs/milestone-2.md` and `docs/roadmap.md` added to Tracked docs. Left: `docs/usability-test.md`, when step 12 creates it.)* Claude records each answer in AUTHORITY.md with its date, adds `docs/milestone-2.md`, `docs/usability-test.md` (step 12) and, if not yet listed, `docs/roadmap.md` to "Tracked docs", and updates PLAN.md's Milestone 2 line if needed.
+- [x] The owner merges the pull request. *(Merged by Claude at the owner's request, 2026-09-25.)*
 
 **Done when:** no [Step 0] decision is open, and AUTHORITY.md and this file are merged to `main`.
 

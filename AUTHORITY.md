@@ -78,7 +78,11 @@ Answers to the Milestone 2, Step 0 decisions in `docs/milestone-2.md` ([pull req
   - `PLAN.md`: private planning notes.
   - `ops/SERVER.local.md`: origin IPs, VNC console and zone IDs; publishing the origin IP would let anyone bypass Cloudflare.
   - `.claude/settings.local.json`.
-- **Tracked docs.** `docs/ranking-methodology.md` and `docs/milestone-1.md` are versioned.
+- **Tracked docs.** These are versioned:
+  - `docs/ranking-methodology.md`;
+  - `docs/roadmap.md`;
+  - the milestone checklists `docs/milestone-1.md` to `docs/milestone-4.md`;
+  - `docs/owned-fonts.md`, the notes for Milestone 3.
 - **Monthly data refresh.** A scheduled GitHub Actions workflow runs the pipeline and opens a pull request with the new catalog and anything flagged for review. The owner reviews and merges it.
 
 ## Funding
@@ -89,7 +93,7 @@ Answers to the Milestone 2, Step 0 decisions in `docs/milestone-2.md` ([pull req
 
 1. Survey the tools that already exist for this, or for parts of it. *(done 2026-09-25; findings in [docs/prior-art.md](docs/prior-art.md))*
 2. Milestone 1: Step 0 is done; the methodology was approved and merged on 2026-09-25 ([docs/milestone-1.md](docs/milestone-1.md)). Next is Step 1, project setup.
-3. Milestone 2, Step 0: all seven decisions are answered; the checklist awaits merging in [pull request #2](https://github.com/byronshock/trulyfreefonts/pull/2). *(2026-09-25)*
+3. Milestone 2: Step 0 decisions are answered and the checklist is merged ([docs/milestone-2.md](docs/milestone-2.md)). Its steps 1–12 can start on a sample catalog alongside Milestone 1. Milestones 3 and 4 keep their Step 0 until each starts ([docs/roadmap.md](docs/roadmap.md)). *(2026-09-25)*
 
 ## Background
 

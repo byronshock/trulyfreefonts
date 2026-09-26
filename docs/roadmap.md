@@ -4,13 +4,13 @@ Status as of 2026-09-25. Settled decisions are in [AUTHORITY.md](../AUTHORITY.md
 
 ## Milestone 1: catalog script and catalog.json
 - **Goal:** one script builds a ranked, license-checked catalog of about 500 truly free Latin font families.
-- **Status:** Step 0 in review in [pull request #1](https://github.com/byronshock/trulyfreefonts/pull/1). D8 is decided; D1, D3, D4, D7, D10, D12, D13, D14, D15 and D17 are open.
+- **Status:** Step 0 done: the methodology was approved and merged on 2026-09-25 ([pull request #1](https://github.com/byronshock/trulyfreefonts/pull/1)), with every decision recorded in AUTHORITY.md. Next: Step 1, project setup.
 - **Checklist:** [milestone-1.md](milestone-1.md)
 - **Depends on:** nothing.
 
 ## Milestone 2: the filterable list goes live (intermediate release)
 - **Goal:** the ranked, filterable list replaces the stub, with methodology, privacy and about pages and a tip link; usability testing starts. No owned-font comparison.
-- **Status:** draft checklist awaiting its Step 0. Done early: the server log policy (M2-D9), Cloudflare's error logging off, and the live tip link ([ops/DONATIONS.md](../ops/DONATIONS.md) steps 1–10).
+- **Status:** Step 0 decisions answered and the checklist merged on 2026-09-25 ([pull request #2](https://github.com/byronshock/trulyfreefonts/pull/2)). Steps 1–12 can start on a sample catalog while Milestone 1 builds. Done early: the server log policy (M2-D9), Cloudflare's error logging off, and the live tip link ([ops/DONATIONS.md](../ops/DONATIONS.md) steps 1–10).
 - **Checklist:** [milestone-2.md](milestone-2.md)
 - **Depends on:** Milestone 1. Its step 20 freezes `catalog-site.json` v1 after this milestone's step 2 approves the fields; the soft launch waits for that freeze.
 
