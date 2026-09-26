@@ -19,19 +19,19 @@ Tick each item as soon as it is done and verified. If an item is only partly don
 **Who:** owner; Claude answers questions and makes edits. **Depends on:** nothing.
 - [x] Claude opens a pull request adding `docs/ranking-methodology.md` (status: proposal) and this checklist. ([#1](https://github.com/byronshock/trulyfreefonts/pull/1))
 - [x] Claude posts a rough preview in the pull request ([comment](https://github.com/byronshock/trulyfreefonts/pull/1#issuecomment-5833687627)): the top 50 of the desktop, project and overall ranks, built from the local data of 2026-09-25 with naive name matching and labelled "rough".
-- [ ] The owner answers the eleven **DECISION [Step 0]** items and edits any [later OK] default. *(Partly done: D8 answered; 10 left.)*
-  - D1 method;
-  - D3 license classes and previews;
-  - D4 Latin;
-  - D7 Nerd and CJK credit;
-  - ~~D8 preinstalled fonts~~ answered 2026-09-25: two desktop views (*most chosen* feeds overall; *most installed* shown alongside);
-  - D10 project scope;
-  - D12 overall mix;
-  - D13 extra views;
-  - D14 evidence gate;
-  - D15 snapshot storage;
-  - D17 licenses (the data license stays provisional until step 3).
-- [ ] If D12 is (a), the owner names 3–5 designer lists (with URLs); otherwise designer picks are set to 0.
+- [x] The owner answers the eleven **DECISION [Step 0]** items and edits any [later OK] default. *(Done 2026-09-25; [later OK] defaults kept.)*
+  - D1 method: equated scores plus shrinkage;
+  - D3 licenses: CC-BY in with a badge, copyleft out;
+  - D4 Latin: option (C), strict plus a reviewed allowlist;
+  - D7 Nerd and CJK credit: 1.0;
+  - D8 two desktop views, *most chosen* feeds overall;
+  - D10 project scope: websites, code and apps, plus ecosyste.ms dependents;
+  - D12 overall: usage only, 50/50;
+  - D13 extra views: all four;
+  - D14 evidence gate: two groups plus κ 0.2;
+  - D15 snapshots: private data repository;
+  - D17 licenses: MIT code; CC BY-SA 4.0 data, provisional until step 3.
+- [x] If D12 is (a), the owner names 3–5 designer lists (with URLs); otherwise designer picks are set to 0. *(D12 is usage only: designer picks are 0.)*
 - [ ] Claude records each answer in AUTHORITY.md with its date. *(Partly done: D8 recorded.)*
 - [x] Claude updates the stale lines in PLAN.md, which stays local and untracked:
   - "reciprocal-rank fusion";
@@ -48,11 +48,11 @@ Tick each item as soon as it is done and verified. If an item is only partly don
   - dependencies httpx, fonttools, numpy and jsonschema (tomllib is built in);
   - `uv.lock` committed.
 - [ ] Layout:
-  - `config/`: `ranking.toml`, `licenses.toml`, `preinstalled.toml`, `foundries.toml`, `designer_lists/`;
+  - `config/`: `ranking.toml`, `licenses.toml`, `preinstalled.toml`, `foundries.toml`;
   - `data/`: `aliases.csv`, `reviews/` (owner rulings);
   - `state/` (see step 3);
   - `build/`: `catalog.json`, `catalog-site.json`, `review.md`.
-- [ ] `LICENSE` for code and `LICENSE-DATA` for the catalog, per D17. The data license is marked provisional.
+- [ ] `LICENSE` (MIT) for code and `LICENSE-DATA` (CC BY-SA 4.0) for the catalog, per D17. The data license is marked provisional.
 - [ ] A README with source credits.
 - [ ] CI on every pull request: `uv run ruff check`, `uv run pytest`, and a secret scan (gitleaks).
 - [ ] Owner: branch protection for `main` requiring the CI checks, with **0 required approvals**, because the owner can't approve their own pull requests.
@@ -73,7 +73,7 @@ Tick each item as soon as it is done and verified. If an item is only partly don
 
   Each entry names its system. Only Linux entries trigger abstentions; Windows, macOS and Android entries only add `preinstalled_on` tags.
   - the LibreOffice bundle.
-- [ ] `foundries.toml` lists League of Moveable Type, Velvetyne, Collletttivo, Open Foundry and Roundo; the designer lists are added if D12 is (a).
+- [ ] `foundries.toml` lists League of Moveable Type, Velvetyne, Collletttivo, Open Foundry and Roundo.
 - [ ] `tff-catalog config` prints the effective config and its hash.
 
 **Done when:** the loader tests pass and the owner has reviewed `preinstalled.toml`.
@@ -106,8 +106,7 @@ Tick each item as soon as it is done and verified. If an item is only partly don
   - npm;
   - jsDelivr;
   - Chocolatey;
-  - GitHub;
-  - the designer lists.
+  - GitHub.
 - [ ] Claude drafts a request to the Fonts Over Time author for an explicit data license (for example CC BY 4.0); the owner posts it.
 
 **Done when:**
@@ -215,8 +214,8 @@ Tick each item as soon as it is done and verified. If an item is only partly don
 - [ ] Web Almanac 2025 sheets: find the header row, validate the columns, and pin the sheet id and tabs per edition in config.
 - [ ] Google Fonts `/metadata/stats`, falling back to the popularity field.
 - [ ] npm `downloads/point/last-year` for @fontsource, @fontsource-variable and @expo-google-fonts packages above the floor, at most 1 request a second with backoff on 429.
+- [ ] ecosyste.ms dependent-repository counts for the same packages (packages.ecosyste.ms API), credited as CC BY-SA 4.0.
 - [ ] Fontsource `/v1/stats` (jsDelivr).
-- [ ] Designer-list loader (if D12 is (a)).
 - [ ] Flutter code search: deferred until a token is chosen.
 
 **Done when:** `tff-catalog fetch` runs every collector locally. The Actions run is checked in step 19.
@@ -318,7 +317,6 @@ Tick each item as soon as it is done and verified. If an item is only partly don
   - `aliases[]` (old names and build names, for search and matching);
   - per source: {state, rank_in_source}, only as far as the step 3 terms ruling allows;
   - `flags[]`: held back by the two-group gate, no evidence of deliberate installs, too new;
-  - designer-list membership, if D12 is (a);
   - `preview` {path, sha256} for fonts with a preview.
 
   At the top level, the file also carries the run date, method version, stale sources with their data dates, the data license and the source credits. Milestone 2's step 2 reviews this list before it is frozen.
