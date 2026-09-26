@@ -116,6 +116,11 @@ Answers to the Milestone 2, Step 0 decisions in `docs/milestone-2.md` ([pull req
   - the milestone checklists `docs/milestone-1.md` to `docs/milestone-4.md`;
   - `docs/owned-fonts.md`, the notes for Milestone 3.
 - **Monthly data refresh.** A scheduled GitHub Actions workflow runs the pipeline and opens a pull request with the new catalog and anything flagged for review. The owner reviews and merges it.
+- **Backlog.** *(2026-09-25)*
+  - **Tool.** [Backlog.md](https://github.com/MrLesk/Backlog.md) keeps its tasks in `backlog/`, committed to the public repository.
+  - **What goes in it.** Only loose items: ideas, bugs and later work that no milestone checklist covers. The milestone checklists stay the plan, and decisions stay in this file, never in `backlog/decisions/`.
+  - **Changes.** A task's status changes in the same pull request as its work.
+  - **Agents.** `CLAUDE.md` tells Claude sessions to use the `backlog` command.
 
 ## Funding
 
