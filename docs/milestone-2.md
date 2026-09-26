@@ -30,7 +30,7 @@ Tick each item as soon as it is done and verified. If an item is only partly don
 ### Step 0: Owner reviews this checklist
 **Who:** owner; Claude answers questions and makes edits. **Depends on:** nothing; it can run during Milestone 1. Only M2-D5 (d) waits on a Milestone 1 decision (D3).
 - [ ] Claude opens a pull request adding this checklist.
-- [ ] The owner answers the seven **[Step 0]** decisions (M2-D1 to M2-D7) and changes any **[later OK]** default (M2-D8, M2-D10, M2-D11); M2-D9 was decided on 2026-09-25. With step 7, they cover M1 step 20's handoff list.
+- [ ] The owner answers the seven **[Step 0]** decisions (M2-D1 to M2-D7) *(partly done: M2-D1 to M2-D3 answered 2026-09-25; M2-D4 to M2-D7 left)* and changes any **[later OK]** default (M2-D8, M2-D10, M2-D11); M2-D9 was decided on 2026-09-25. With step 7, they cover M1 step 20's handoff list.
 - [ ] Claude records each answer in AUTHORITY.md with its date, adds `docs/milestone-2.md`, `docs/usability-test.md` (step 12) and, if not yet listed, `docs/roadmap.md` to "Tracked docs", and updates PLAN.md's Milestone 2 line if needed.
 - [ ] The owner merges the pull request.
 
@@ -58,7 +58,7 @@ Tick each item as soon as it is done and verified. If an item is only partly don
 **Who:** Claude. **Depends on:** 1, 2; M2-D1, M2-D2, M2-D4; D3, D4, D6, D10, D13.
 - [ ] A rank selector: Overall; Desktop *most chosen*; Desktop *most installed*; Project (named per D10); and D13's views (Coding, Developers & apps, and Rising (beta) once it has 3 months of history). One line says what the rank measures; "By category" is the category filter on Overall.
 - [ ] Each row: rank or band, name, specimen or fallback text (step 5), category, license, badges (variable, monospace, limited accents, attribution required, not redistributable, preinstalled on …), the official download link and a details button.
-- [ ] Numbers follow M2-D2; bands ("101–250", "251–500") follow `order`. Fonts unranked in the view come last, unnumbered, with a reason: in *most chosen*, "no evidence of deliberate installs" plus the `preinstalled_on` or `pulled_in_by` tag. Coding lists monospace fonts only.
+- [ ] Numbers follow M2-D2: each filtered list counts from 1. Fonts past the rank's exact top 100 show their band ("101–250", "251–500") instead of a number, in `order`. Fonts unranked in the view come last, unnumbered, with a reason: in *most chosen*, "no evidence of deliberate installs" plus the `preinstalled_on` or `pulled_in_by` tag. Coding lists monospace fonts only.
 - [ ] Filters, laid out per M2-D4: category; monospace only; "Text only" (D13); variable; hide limited accents (D4); license class (D3); hide attribution required; hide fonts that come with Windows, macOS, Linux or Android; **"Redistributable fonts only"** (Rule 3), off by default, with a line on what redistributing means.
 - [ ] Search over names and aliases by `search_key` (NFKC, case-fold, drop spaces, hyphens and underscores, strip accents), so "Source Sans Pro" finds Source Sans 3. Its test vectors later move into M3 step 3's shared file.
 - [ ] Sort by rank (default) or name, with a count ("Showing 48 of 540 fonts"), "Clear filters", and a no-results message naming filters to loosen.
@@ -253,9 +253,9 @@ Defaults are in bold. A **[Step 0]** decision is answered before building starts
 
 | Decision | Options |
 |---|---|
-| **M2-D1 [Step 0]: default rank** on first load | **(a) Overall**, the plainest answer to "the most popular truly free fonts"; (b) Desktop *most chosen*; (c) Project. |
-| **M2-D2 [Step 0]: rank numbers under filters** (bands stay bands) | **(a) Keep the chosen rank's numbers** (#3, #17, #42) with a count, so a number means the same everywhere, even in a shared link; (b) renumber 1, 2, 3 …; (c) the rank's number plus a position counter. |
-| **M2-D3 [Step 0]: page technology** | **(a) Plain HTML, CSS and one script, no framework**, built by `tff-site` in the uv project: one toolchain, nothing from npm; (b) Hugo or Eleventy (needs Node): templates built in, but a second toolchain; (c) Svelte or Preact with Vite: npm packages to audit, for a few pages. |
+| **M2-D1 (decided 2026-09-25): default rank** on first load | **Overall**, the plainest answer to "the most popular truly free fonts". (Other options were Desktop *most chosen* or Project.) |
+| **M2-D2 (decided 2026-09-25): rank numbers under filters** (bands stay bands) | **Renumber 1, 2, 3 …** within each filtered list; fonts past the exact top 100 show their band instead. (Other options were keeping the rank's own numbers, or both.) |
+| **M2-D3 (decided 2026-09-25): page technology** | **Plain HTML, CSS and one script, no framework**, built by `tff-site` in the uv project: one toolchain, nothing from npm. (Other options were Hugo/Eleventy or Svelte/Preact with Vite.) |
 | **M2-D4 [Step 0]: which filters come first** (round 1 may change it) | **(a) Search, rank, category and "Redistributable fonts only" always visible**, the rest under "More filters"; on phones, all but search and rank behind one "Filters" button; (b) all filters in a sidebar on wide screens, phones as in (a). |
 | **M2-D5 [Step 0]: font previews.** Under D3, only `preview_ok` (redistributable) fonts get one, and no trimmed or converted font file is served. | **(a) SVG specimens drawn at each refresh (step 5):** no font files served, a few KB per font; other fonts get fallback text and their official link; (b) as (a), plus "Type your own text", loading the unchanged upstream file on request (a variable font can be hundreds of KB); (c) the upstream files, loaded as rows scroll in: simplest, heaviest on phones; (d) as (a) for every catalog font: an image isn't a font file, but this changes D3's rule, so it needs the owner's D3 ruling first. |
 | **M2-D6 [Step 0]: deploy path**, also for Milestones 3 and 4, revisited at Milestone 4's two-month review | (a) `ops/deploy.sh` from the laptop: no new server access, but someone runs it after each merged refresh; **(b) GitHub Actions deploys each push to `main`** as a restricted `deploy` user (step 11): merged refreshes go live with no further step, and the laptop script is the fallback. |
