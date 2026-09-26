@@ -58,6 +58,7 @@ How the Contabo VPS and the three Cloudflare zones are set up. The settled decis
 ### F. Visitor privacy (Claude)
 - [x] 17. Cloudflare Network Error Logging (the `NEL` / `Report-To` headers, which made browsers report connection failures to a.nel.cloudflare.com) turned off on all 3 zones (`PATCH /zones/<id>/settings/nel` `{"value":{"enabled":false}}`). *(2026-09-25)*
 - [x] 18. Access log privacy: the Caddyfile log filter masks `remote_ip` and `client_ip` (/16, /32) and drops `remote_port`, `Cf-Connecting-Ip` and `X-Forwarded-For`; Caddy's rolling is off; `logrotate` installed and keeps 14 days, rotated daily. Lines logged before the change were masked in place. *(2026-09-25)*
+- [x] 19. On all 3 zones: Email Address Obfuscation off (`PATCH /zones/<id>/settings/email_obfuscation` `{"value":"off"}`), since it injects a script; Rocket Loader and Always Online confirmed off; Browser Cache TTL set to "Respect Existing Headers" (`browser_cache_ttl` `{"value":0}`, was 14400). *(2026-09-25; Milestone 2 step 9)*
 
 ## Verification
 - `ssh tff sudo -n true` works; `ssh root@<IP>` and `ssh -o PubkeyAuthentication=no tff` are refused.
@@ -66,4 +67,5 @@ How the Contabo VPS and the three Cloudflare zones are set up. The settled decis
 - `curl -sI https://trulyfreefonts.com` → 200, `server: cloudflare`. `www.`, `.org` and `.net` URLs → 301 to the same path on `https://trulyfreefonts.com`.
 - SSL mode is `strict` on all 3 zones.
 - `curl -sI https://trulyfreefonts.com` has no `nel` or `report-to` header.
+- On each zone, `ops/cf.sh GET /zones/<id>/settings/<name>` gives `email_obfuscation` off, `rocket_loader` off, `always_online` off and `browser_cache_ttl` 0.
 - `ssh tff 'sudo tail -1 /var/log/caddy/access.log'` shows a masked `client_ip` (ending `.0.0` or `::`), no `remote_port`, and no `Cf-Connecting-Ip` or `X-Forwarded-For` header. `sudo logrotate --debug /etc/logrotate.d/caddy-trulyfreefonts` reports no errors.

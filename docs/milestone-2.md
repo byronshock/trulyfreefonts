@@ -137,7 +137,7 @@ Tick each item as soon as it is done and verified. If an item is only partly don
   - `Cross-Origin-Opener-Policy` and `Cross-Origin-Resource-Policy`: `same-origin`;
   - `no-transform` on HTML (step 11), so Cloudflare can't rewrite pages even if a setting changes;
   - the current HSTS, `nosniff` and `Referrer-Policy: strict-origin-when-cross-origin`.
-- [ ] Via `ops/cf.sh`, on all three zones (states as of 2026-09-25): Email Address Obfuscation off (it is on and injects a script); Rocket Loader and Always Online kept off; Browser Cache TTL "Respect Existing Headers" (now 4 hours).
+- [x] Via `ops/cf.sh`, on all three zones: Email Address Obfuscation off (it was on and injected a script); Rocket Loader and Always Online kept off; Browser Cache TTL "Respect Existing Headers" (was 4 hours). *(Done 2026-09-25; [ops/SERVER.md](../ops/SERVER.md) item 19.)*
 - [ ] Owner, in the dashboard: Web Analytics' automatic setup disabled (on by default); Bot Fight Mode off (it sets `__cf_bm`); Zaraz and Cloudflare Fonts unused.
 - [x] Network Error Logging off on all three zones, and the access log per M2-D9 (done 2026-09-25; [ops/SERVER.md](../ops/SERVER.md) section F). The live test below and step 14's SERVER.md checks re-verify them.
 - [ ] A Playwright test (Chromium, Firefox) loads every page, applies filters, opens details and scrolls every specimen into view, failing on any request to another site, cookie, browser-storage write or CSP violation. It runs in CI and after each deploy on the live site, where it also checks headers (CSP present; no `set-cookie`, `nel` or `report-to`) and that the HTML has no `/cdn-cgi/` path. If M3-D13 (browser storage) stores anything, Milestone 3 turns the storage check into a key allowlist.
