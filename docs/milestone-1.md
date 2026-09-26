@@ -37,7 +37,7 @@ Tick each item as soon as it is done and verified. If an item is only partly don
   - "reciprocal-rank fusion";
   - "publishes by rsync";
   - "Google Fonts metadata" as a ranking source.
-- [ ] Claude marks the methodology "approved"; the owner merges the pull request.
+- [x] Claude marks the methodology "approved"; the owner merges the pull request. *(Approved 2026-09-25; merged by Claude at the owner's request.)*
 
 **Done when:** no [Step 0] decision is open, and AUTHORITY.md and both docs are merged to `main`.
 
