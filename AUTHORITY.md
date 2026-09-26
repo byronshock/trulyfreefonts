@@ -28,6 +28,22 @@ Answers to the Milestone 1, Step 0 decisions in [docs/ranking-methodology.md](do
   - **most installed:** every install counts.
 
   Only **most chosen** feeds the overall rank. Affected fonts are tagged with the systems or packages that bring them in. *(2026-09-25)*
+- **D1: method.** Each source's order is mapped onto one shared scale. A source that doesn't carry a font is left out rather than counted as zero, and thin evidence is pulled toward the middle. Coverage-aware reciprocal-rank fusion runs monthly as a cross-check. *(2026-09-25)*
+- **D3: license classes.**
+  - CC-BY fonts qualify, with an "attribution required" badge.
+  - Copyleft licenses without a font exception (CC-BY-SA, plain GPL/LGPL, AGPL) are excluded.
+  - Any ban on modification or embedding excludes a font, extending Rule 4.
+  - Previews are shown only for redistributable fonts, served unchanged.
+
+  *(2026-09-25)*
+- **D4: Latin.** Google's strict metadata test, plus dual-script families the owner approves from a reviewed short list. *(2026-09-25)*
+- **D7: patched builds.** Nerd Font and CJK builds count in full toward the original family. *(2026-09-25)*
+- **D10: project rank.** It covers websites, code and apps: web 55%, code 30% (including ecosyste.ms dependent repositories), apps 15%. *(2026-09-25)*
+- **D12: overall rank.** Desktop (*most chosen*) 50% plus project 50%, usage only, with no designer picks. *(2026-09-25)*
+- **D13: extra views.** Publish all four: Coding fonts, Developers & apps, By category and Rising (beta). *(2026-09-25)*
+- **D14: evidence gate.** A top-100 place needs evidence from at least 2 independent source groups, plus a mild pull of thin evidence toward the middle (κ 0.2). *(2026-09-25)*
+- **D15: snapshots.** Monthly data extracts live in a private GitHub data repository, reached with a deploy key or GitHub App. *(2026-09-25)*
+- **D17: licenses.** The code is MIT. The catalog data is CC BY-SA 4.0, provisional until the Milestone 1 step 3 audit of each source's terms. *(2026-09-25)*
 
 ## Infrastructure
 
