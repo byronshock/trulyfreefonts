@@ -1,6 +1,7 @@
 """tff_catalog.keys against the shared vector file tests/vectors/name-keys.json."""
 
 import json
+import sys
 import unicodedata
 from pathlib import Path
 
@@ -20,7 +21,7 @@ DROPPED = expand_codepoints(DROP_CODEPOINTS)
 def test_vector_file_header():
     assert DATA["format"] == "tff-name-keys"
     assert DATA["version"] == 1
-    assert set(DATA["spec"]) == {"match_key", "search_key", "drop_codepoints"}
+    assert set(DATA["spec"]) == {"match_key", "search_key", "drop_codepoints", "casefold_extra"}
     assert len(CASES) >= 40
     inputs = [case["input"] for case in CASES]
     assert len(set(inputs)) == len(inputs), "duplicate inputs"
@@ -30,6 +31,45 @@ def test_vector_file_header():
 
 def test_drop_codepoints_constant_equals_file():
     assert list(DROP_CODEPOINTS) == DATA["spec"]["drop_codepoints"]
+
+
+def _python_casefold_extra() -> dict[str, str]:
+    """Code points that can follow NFKC whose casefold differs from lower() plus ß/ς."""
+    table = {}
+    for cp in range(sys.maxunicode + 1):
+        if 0xD800 <= cp <= 0xDFFF:
+            continue
+        ch = chr(cp)
+        if unicodedata.category(ch) == "Cn" or not unicodedata.is_normalized("NFKC", ch):
+            continue
+        if ch.casefold() != ch.lower().replace("\u00df", "ss").replace("\u03c2", "\u03c3"):
+            table[f"{cp:04X}"] = " ".join(f"{ord(x):04X}" for x in ch.casefold())
+    return table
+
+
+def test_casefold_extra_is_pythons_casefold():
+    """The JavaScript port's casefold table (site/js/05-keys.js must equal it too)."""
+    assert DATA["spec"]["casefold_extra"] == _python_casefold_extra()
+
+
+def _js_style_casefold(s: str) -> str:
+    extra = DATA["spec"]["casefold_extra"]
+    out = []
+    for ch in s:
+        mapped = extra.get(f"{ord(ch):04X}")
+        if mapped is None:
+            out.append(ch.lower().replace("\u00df", "ss").replace("\u03c2", "\u03c3"))
+        else:
+            out.append("".join(chr(int(h, 16)) for h in mapped.split()))
+    return "".join(out)
+
+
+@settings(max_examples=400, derandomize=True, deadline=None)
+@given(st.text(st.characters(), max_size=24))
+def test_the_javascript_recipe_matches_casefold(s):
+    nfkc = unicodedata.normalize("NFKC", s)
+    js = unicodedata.normalize("NFKC", _js_style_casefold(nfkc))
+    assert js == unicodedata.normalize("NFKC", nfkc.casefold())
 
 
 def test_unicode_tables_are_new_enough():

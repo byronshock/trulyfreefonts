@@ -17,11 +17,15 @@ __pycache__/
 .hypothesis/
 
 # Pipeline and site working output. build/*.json, build/*.md and
-# build/specimens/ are committed; these are not.
+# build/specimens/ are committed; these are not. build/review/ and
+# build/review-pack/ are the owner's review aids and may show values that
+# rulings T2 and T4 keep private.
 build/stage/
 build/state/
 build/site/
 build/cache/
+build/review/
+build/review-pack/
 
 # Local research notes, private server notes and secrets.
 research/

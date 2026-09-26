@@ -1,0 +1,492 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://trulyfreefonts.com/schemas/stage/records/1",
+  "title": "Collector record",
+  "description": "One line of build/stage/records/<source>.jsonl and of a collector's expected.jsonl: records.to_json() of an Observation, UniverseRecord, LicenseFact or Relation (design-m1 §2.1). Every field is always present. Record URLs are raw upstream facts, so http:// is allowed here; outputs require https://.",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/Observation"
+    },
+    {
+      "$ref": "#/$defs/UniverseRecord"
+    },
+    {
+      "$ref": "#/$defs/LicenseFact"
+    },
+    {
+      "$ref": "#/$defs/Relation"
+    }
+  ],
+  "$defs": {
+    "date": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "url": {
+      "type": "string",
+      "maxLength": 2048,
+      "pattern": "^https?://\\S+$"
+    },
+    "source": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_]*$"
+    },
+    "text": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_key": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ns",
+        "key"
+      ],
+      "properties": {
+        "ns": {
+          "enum": [
+            "almanac-name",
+            "arch-pkg",
+            "brew-cask",
+            "deb-pkg",
+            "deb-src",
+            "font-name",
+            "fontist-formula",
+            "fot-name",
+            "foundry-family",
+            "fs-id",
+            "gf-dir",
+            "gf-family",
+            "gh-asset",
+            "nerd-folder",
+            "npm",
+            "system"
+          ]
+        },
+        "key": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "attrs": {
+      "type": "object",
+      "propertyNames": {
+        "pattern": "^[a-z][a-z0-9_]*$"
+      },
+      "additionalProperties": {
+        "type": [
+          "string",
+          "number",
+          "boolean"
+        ]
+      }
+    },
+    "strings": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "FontFileRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "codepoints",
+        "role",
+        "sha256",
+        "size",
+        "unicode_range",
+        "url"
+      ],
+      "properties": {
+        "url": {
+          "$ref": "#/$defs/url"
+        },
+        "sha256": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/sha256"
+            }
+          ]
+        },
+        "size": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "role": {
+          "enum": [
+            "italic",
+            "other",
+            "regular",
+            "variable"
+          ]
+        },
+        "codepoints": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "unicode_range": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "Observation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "attrs",
+        "end",
+        "key",
+        "series",
+        "source",
+        "start",
+        "type",
+        "unit",
+        "value"
+      ],
+      "properties": {
+        "type": {
+          "const": "Observation"
+        },
+        "source": {
+          "$ref": "#/$defs/source"
+        },
+        "series": {
+          "$ref": "#/$defs/text"
+        },
+        "key": {
+          "$ref": "#/$defs/source_key"
+        },
+        "value": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "unit": {
+          "enum": [
+            "dependents",
+            "downloads",
+            "hits",
+            "installs",
+            "pages",
+            "rank",
+            "requests",
+            "share",
+            "sites",
+            "views"
+          ]
+        },
+        "start": {
+          "$ref": "#/$defs/date"
+        },
+        "end": {
+          "$ref": "#/$defs/date"
+        },
+        "attrs": {
+          "$ref": "#/$defs/attrs"
+        }
+      }
+    },
+    "UniverseRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "added",
+        "attrs",
+        "category",
+        "classifications",
+        "display_name",
+        "drop",
+        "family",
+        "files",
+        "is_monospace",
+        "key",
+        "latin_languages",
+        "names",
+        "primary_script",
+        "source",
+        "status",
+        "subsets",
+        "type",
+        "urls",
+        "variable"
+      ],
+      "properties": {
+        "type": {
+          "const": "UniverseRecord"
+        },
+        "source": {
+          "$ref": "#/$defs/source"
+        },
+        "key": {
+          "$ref": "#/$defs/source_key"
+        },
+        "family": {
+          "$ref": "#/$defs/text"
+        },
+        "display_name": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "category": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "classifications": {
+          "$ref": "#/$defs/strings"
+        },
+        "primary_script": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "subsets": {
+          "$ref": "#/$defs/strings"
+        },
+        "latin_languages": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "is_monospace": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "variable": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "added": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/date"
+            }
+          ]
+        },
+        "status": {
+          "enum": [
+            "delisted",
+            "deprecated",
+            "live",
+            "queued"
+          ]
+        },
+        "urls": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "prefixItems": [
+              {
+                "enum": [
+                  "homepage",
+                  "license",
+                  "minisite",
+                  "repository",
+                  "specimen"
+                ]
+              },
+              {
+                "$ref": "#/$defs/url"
+              }
+            ],
+            "minItems": 2,
+            "items": false
+          }
+        },
+        "files": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/FontFileRef"
+          }
+        },
+        "names": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "prefixItems": [
+              {
+                "$ref": "#/$defs/text"
+              },
+              {
+                "enum": [
+                  "build",
+                  "bundle",
+                  "distinct",
+                  "ineligible",
+                  "package",
+                  "postscript",
+                  "related",
+                  "rename",
+                  "sibling"
+                ]
+              }
+            ],
+            "minItems": 2,
+            "items": false
+          }
+        },
+        "drop": {
+          "enum": [
+            null,
+            "barcode",
+            "emoji",
+            "icon",
+            "math",
+            "music",
+            "non-font",
+            "proprietary",
+            "symbol"
+          ]
+        },
+        "attrs": {
+          "$ref": "#/$defs/attrs"
+        }
+      }
+    },
+    "LicenseFact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "attrs",
+        "key",
+        "raw",
+        "rfn",
+        "source",
+        "spdx",
+        "text_sha256",
+        "text_url",
+        "type"
+      ],
+      "properties": {
+        "type": {
+          "const": "LicenseFact"
+        },
+        "source": {
+          "$ref": "#/$defs/source"
+        },
+        "key": {
+          "$ref": "#/$defs/source_key"
+        },
+        "raw": {
+          "type": "string"
+        },
+        "spdx": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "text_url": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/url"
+            }
+          ]
+        },
+        "text_sha256": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/sha256"
+            }
+          ]
+        },
+        "rfn": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "attrs": {
+          "$ref": "#/$defs/attrs"
+        }
+      }
+    },
+    "Relation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "alt",
+        "attrs",
+        "kind",
+        "object",
+        "source",
+        "subject",
+        "type"
+      ],
+      "properties": {
+        "type": {
+          "const": "Relation"
+        },
+        "source": {
+          "$ref": "#/$defs/source"
+        },
+        "subject": {
+          "$ref": "#/$defs/source_key"
+        },
+        "kind": {
+          "enum": [
+            "depends",
+            "group",
+            "optdepends",
+            "preinstalled",
+            "provides",
+            "recommends"
+          ]
+        },
+        "object": {
+          "$ref": "#/$defs/source_key"
+        },
+        "alt": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "attrs": {
+          "$ref": "#/$defs/attrs"
+        }
+      }
+    }
+  }
+}

@@ -10,6 +10,12 @@ This module and the site's JavaScript port must both reproduce every case in it.
 
 Both functions are idempotent and depend only on the standard library, so the
 site build can import this module without the pipeline's dependencies.
+
+JavaScript has no casefold: the port uses the vector file's
+``spec.casefold_extra`` table for the code points where Python's casefold
+differs from ``toLowerCase()`` (Cherokee, Greek iota subscripts, old Cyrillic
+variants and a few more), and ``toLowerCase()`` for the rest, with sharp s folded
+to "ss" and final sigma to medial sigma.
 """
 
 import unicodedata

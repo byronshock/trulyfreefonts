@@ -1,0 +1,14 @@
+# L1 normalisation: a license string exactly as a source writes it, mapped to
+# an SPDX expression (milestone-1 step 6a). SKELETON.
+#
+# Filled in wave 1 by agent P3 (licenses.py); DEP-5 short names, Fontist and
+# Homebrew spellings go here. Loaded strictly by tff_catalog.config into
+# config_model.LicenseAliasesConfig: unknown or missing keys fail.
+#
+# [aliases]
+# "SIL-OFL-1.1" = "OFL-1.1"
+# "OFL-1.1-RFN" = "OFL-1.1"
+
+schema = 1
+
+[aliases]

@@ -1,0 +1,802 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://trulyfreefonts.com/schemas/catalog/0.1.0-draft",
+  "title": "catalog.json",
+  "description": "The full ranked catalog (methodology §7, milestone-1 step 15). Draft v0: stage owners tighten it through the lead. catalog-site.json is derived from it.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "data_license",
+    "fonts",
+    "run",
+    "schema_version",
+    "sources"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "0.1.0-draft"
+    },
+    "run": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "code_commit",
+        "config_sha256",
+        "date",
+        "generator",
+        "method_version",
+        "ranking_toml_sha256"
+      ],
+      "properties": {
+        "date": {
+          "$ref": "#/$defs/date"
+        },
+        "method_version": {
+          "$ref": "#/$defs/date"
+        },
+        "config_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "ranking_toml_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "code_commit": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "generator": {
+          "$ref": "#/$defs/text"
+        }
+      }
+    },
+    "data_license": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "provisional",
+        "spdx",
+        "url"
+      ],
+      "properties": {
+        "spdx": {
+          "const": "CC-BY-SA-4.0"
+        },
+        "provisional": {
+          "description": "Ruling T5 (2026-09-25) made CC BY-SA 4.0 final.",
+          "const": false
+        },
+        "url": {
+          "$ref": "#/$defs/https_url"
+        }
+      }
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "collector",
+          "data_date",
+          "fetched_at",
+          "group",
+          "id",
+          "publish_raw",
+          "ruler_overlap",
+          "stale",
+          "survey",
+          "weight"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/token"
+          },
+          "collector": {
+            "$ref": "#/$defs/token"
+          },
+          "group": {
+            "enum": [
+              "arch",
+              "debian",
+              "flutter",
+              "fot",
+              "github_counters",
+              "google",
+              "homebrew",
+              "http_archive",
+              "jsdelivr",
+              "npm_registry"
+            ]
+          },
+          "survey": {
+            "enum": [
+              "desktop",
+              "project"
+            ]
+          },
+          "weight": {
+            "type": "number",
+            "minimum": 0
+          },
+          "publish_raw": {
+            "type": "boolean"
+          },
+          "data_date": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/$defs/date"
+              }
+            ]
+          },
+          "fetched_at": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "stale": {
+            "type": "boolean"
+          },
+          "ruler_overlap": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 0
+          }
+        }
+      }
+    },
+    "fonts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "family",
+          "category",
+          "is_monospace",
+          "superfamily_id",
+          "aliases",
+          "related",
+          "license",
+          "font_file",
+          "latin",
+          "formats",
+          "preview_ok",
+          "preview",
+          "preinstalled_on",
+          "pulled_in_by",
+          "links",
+          "first_seen",
+          "flags",
+          "ranks",
+          "sources"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/id"
+          },
+          "family": {
+            "$ref": "#/$defs/name"
+          },
+          "category": {
+            "enum": [
+              "sans-serif",
+              "serif",
+              "display",
+              "handwriting",
+              "monospace"
+            ]
+          },
+          "is_monospace": {
+            "type": "boolean"
+          },
+          "superfamily_id": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/$defs/token"
+              }
+            ]
+          },
+          "aliases": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "name",
+                "relation"
+              ],
+              "properties": {
+                "name": {
+                  "$ref": "#/$defs/name"
+                },
+                "relation": {
+                  "enum": [
+                    "rename",
+                    "build",
+                    "package",
+                    "postscript",
+                    "bundle",
+                    "sibling"
+                  ]
+                }
+              }
+            }
+          },
+          "related": {
+            "description": "Families derived from or closely related to this one (Adwaita Sans is derived from Inter).",
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "id"
+              ],
+              "properties": {
+                "id": {
+                  "$ref": "#/$defs/id"
+                },
+                "note": {
+                  "$ref": "#/$defs/text"
+                }
+              }
+            }
+          },
+          "license": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "attribution",
+              "attribution_required",
+              "checked_on",
+              "class",
+              "name",
+              "redistributable",
+              "spdx",
+              "text_sha256",
+              "text_url",
+              "verified_level"
+            ],
+            "properties": {
+              "spdx": {
+                "type": "string",
+                "maxLength": 200,
+                "pattern": "^[A-Za-z0-9][A-Za-z0-9.+:() -]*$"
+              },
+              "name": {
+                "$ref": "#/$defs/text"
+              },
+              "class": {
+                "$ref": "#/$defs/token"
+              },
+              "redistributable": {
+                "type": "boolean"
+              },
+              "attribution_required": {
+                "type": "boolean"
+              },
+              "attribution": {
+                "oneOf": [
+                  {
+                    "type": "null"
+                  },
+                  {
+                    "$ref": "#/$defs/text"
+                  }
+                ]
+              },
+              "text_url": {
+                "$ref": "#/$defs/https_url"
+              },
+              "verified_level": {
+                "enum": [
+                  "L1",
+                  "L2",
+                  "L3",
+                  "ruling"
+                ]
+              },
+              "text_sha256": {
+                "oneOf": [
+                  {
+                    "type": "null"
+                  },
+                  {
+                    "$ref": "#/$defs/sha256"
+                  }
+                ]
+              },
+              "checked_on": {
+                "oneOf": [
+                  {
+                    "type": "null"
+                  },
+                  {
+                    "$ref": "#/$defs/date"
+                  }
+                ]
+              }
+            }
+          },
+          "font_file": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "format",
+                  "sha256",
+                  "size",
+                  "url"
+                ],
+                "properties": {
+                  "url": {
+                    "$ref": "#/$defs/https_url"
+                  },
+                  "sha256": {
+                    "$ref": "#/$defs/sha256"
+                  },
+                  "size": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "format": {
+                    "enum": [
+                      "ttf",
+                      "otf",
+                      "woff2",
+                      "woff"
+                    ]
+                  }
+                }
+              }
+            ]
+          },
+          "latin": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "basis",
+              "coverage"
+            ],
+            "properties": {
+              "coverage": {
+                "enum": [
+                  "basic",
+                  "extended"
+                ]
+              },
+              "basis": {
+                "enum": [
+                  "gf_metadata",
+                  "owner_allowlist",
+                  "glyph_test"
+                ]
+              }
+            }
+          },
+          "formats": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "static",
+              "variable"
+            ],
+            "properties": {
+              "variable": {
+                "type": "boolean"
+              },
+              "static": {
+                "type": "boolean"
+              }
+            }
+          },
+          "preview_ok": {
+            "type": "boolean"
+          },
+          "preview": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "path",
+                  "sha256"
+                ],
+                "properties": {
+                  "path": {
+                    "type": "string",
+                    "pattern": "^specimens/[a-z0-9-]+\\.svg$"
+                  },
+                  "sha256": {
+                    "$ref": "#/$defs/sha256"
+                  }
+                }
+              }
+            ]
+          },
+          "preinstalled_on": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "system"
+              ],
+              "properties": {
+                "system": {
+                  "$ref": "#/$defs/token"
+                }
+              }
+            }
+          },
+          "pulled_in_by": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "system",
+                "package"
+              ],
+              "properties": {
+                "system": {
+                  "$ref": "#/$defs/token"
+                },
+                "package": {
+                  "type": "string",
+                  "maxLength": 200,
+                  "pattern": "^[A-Za-z0-9][A-Za-z0-9.+_:@/-]*$"
+                },
+                "share": {
+                  "type": [
+                    "number",
+                    "null"
+                  ],
+                  "minimum": 0,
+                  "maximum": 1
+                }
+              }
+            }
+          },
+          "links": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "designer",
+              "primary"
+            ],
+            "properties": {
+              "primary": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "url"
+                ],
+                "properties": {
+                  "url": {
+                    "$ref": "#/$defs/https_url"
+                  },
+                  "label": {
+                    "$ref": "#/$defs/text"
+                  }
+                }
+              },
+              "designer": {
+                "oneOf": [
+                  {
+                    "type": "null"
+                  },
+                  {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "url"
+                    ],
+                    "properties": {
+                      "url": {
+                        "$ref": "#/$defs/https_url"
+                      },
+                      "label": {
+                        "$ref": "#/$defs/text"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "first_seen": {
+            "$ref": "#/$defs/date"
+          },
+          "flags": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "$ref": "#/$defs/token"
+            }
+          },
+          "ranks": {
+            "type": "object",
+            "required": [
+              "overall"
+            ],
+            "propertyNames": {
+              "$ref": "#/$defs/rank_key"
+            },
+            "additionalProperties": {
+              "$ref": "#/$defs/rank_entry"
+            }
+          },
+          "sources": {
+            "type": "object",
+            "minProperties": 1,
+            "propertyNames": {
+              "$ref": "#/$defs/token"
+            },
+            "additionalProperties": {
+              "$ref": "#/$defs/source_entry"
+            },
+            "description": "One entry per engine source id. value appears only for sources whose publish_raw is true (validate.py checks it against sources[]); Google (ruling T2) and Fonts Over Time (ruling T4) never carry one.",
+            "properties": {
+              "google": {
+                "allOf": [
+                  {
+                    "$ref": "#/$defs/source_entry"
+                  },
+                  {
+                    "not": {
+                      "required": [
+                        "value"
+                      ]
+                    }
+                  }
+                ]
+              },
+              "fot": {
+                "allOf": [
+                  {
+                    "$ref": "#/$defs/source_entry"
+                  },
+                  {
+                    "not": {
+                      "required": [
+                        "value"
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "date": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "https_url": {
+      "type": "string",
+      "maxLength": 2048,
+      "pattern": "^https://[^\\s\"<>]+$"
+    },
+    "id": {
+      "type": "string",
+      "maxLength": 80,
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+    },
+    "token": {
+      "type": "string",
+      "maxLength": 64,
+      "pattern": "^[a-z0-9][a-z0-9_-]*$"
+    },
+    "text": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 500,
+      "pattern": "^\\S(.*\\S)?$"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200,
+      "pattern": "^\\S(.*\\S)?$"
+    },
+    "rank_key": {
+      "enum": [
+        "overall",
+        "desktop_chosen",
+        "desktop_installed",
+        "project",
+        "coding",
+        "dev_apps",
+        "rising"
+      ]
+    },
+    "rank_entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "band",
+        "gate_held",
+        "groups",
+        "order",
+        "range",
+        "rank",
+        "score",
+        "tier",
+        "unranked"
+      ],
+      "properties": {
+        "rank": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1,
+          "maximum": 100
+        },
+        "band": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "order": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1
+        },
+        "tier": {
+          "enum": [
+            "A",
+            "B",
+            "C",
+            null
+          ]
+        },
+        "range": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "array",
+              "prefixItems": [
+                {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              ],
+              "minItems": 2,
+              "items": false
+            }
+          ]
+        },
+        "score": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "groups": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "gate_held": {
+          "type": "boolean"
+        },
+        "unranked": {
+          "enum": [
+            "no_deliberate_evidence",
+            "no_evidence",
+            "too_new",
+            null
+          ]
+        }
+      }
+    },
+    "source_entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "state",
+        "rank_in_source",
+        "z",
+        "weight_used",
+        "reason",
+        "abstains_in"
+      ],
+      "properties": {
+        "state": {
+          "enum": [
+            "observed",
+            "censored",
+            "not_covered",
+            "too_new"
+          ]
+        },
+        "rank_in_source": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1
+        },
+        "z": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "The source's equated z for this font (rank-based); null unless observed or censored."
+        },
+        "weight_used": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0,
+          "description": "The weight this source's term carried in the overall rank for this font: v_s = M_g * w'_s / W_g after the outlier guard and the term's factor. Null when the source had no term in overall (not covered, too new, or abstaining)."
+        },
+        "value": {
+          "description": "The raw value; present only when the source's publish_raw allows it.",
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "reason": {
+          "enum": [
+            null,
+            "below_floor",
+            "no_value",
+            "no_package",
+            "outside_frame",
+            "merged_into_parent"
+          ]
+        },
+        "abstains_in": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/rank_key"
+          }
+        }
+      }
+    }
+  }
+}

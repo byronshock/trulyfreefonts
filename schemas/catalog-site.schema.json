@@ -1,0 +1,613 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://trulyfreefonts.com/schemas/catalog-site/1.0.0-draft",
+  "title": "catalog-site.json",
+  "description": "The trimmed catalog that tff-site builds trulyfreefonts.com from (Milestone 2 design §1). Draft until Milestone 1 step 20 freezes v1. Cross-references (unique ids, bands, classes, systems, sources, views) are checked by tff_site.data.semantic_errors, not here.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "run",
+    "data_license",
+    "views",
+    "bands",
+    "tiers",
+    "sources",
+    "systems",
+    "license_classes",
+    "fonts"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0-draft"
+    },
+    "synthetic": {
+      "description": "Present, and true, only in test fixtures made of invented fonts.",
+      "const": true
+    },
+    "run": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["date", "method_version", "ranking_toml_sha256", "generator"],
+      "properties": {
+        "date": {"$ref": "#/$defs/date"},
+        "method_version": {"$ref": "#/$defs/date"},
+        "ranking_toml_sha256": {"$ref": "#/$defs/sha256"},
+        "generator": {"type": "string", "minLength": 1, "maxLength": 200}
+      }
+    },
+    "data_license": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["spdx", "provisional", "url"],
+      "properties": {
+        "spdx": {"const": "CC-BY-SA-4.0"},
+        "provisional": {"description": "Ruling T5 (2026-09-25) made CC BY-SA 4.0 final.", "const": false},
+        "url": {"$ref": "#/$defs/https_url"}
+      }
+    },
+    "views": {
+      "description": "Every rank key once, in the order the rank selector lists them.",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["key", "label", "measures", "available"],
+        "properties": {
+          "key": {"$ref": "#/$defs/rank_key"},
+          "label": {"$ref": "#/$defs/text"},
+          "measures": {
+            "description": "One line saying what the rank measures, shown under the selector.",
+            "$ref": "#/$defs/text"
+          },
+          "available": {
+            "description": "False hides the view from the selector (Rising until it has 3 months of history).",
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "bands": {
+      "description": "Bands past the exact top 100, in order; the last one is open-ended (to: null).",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["label", "from", "to"],
+        "properties": {
+          "label": {"$ref": "#/$defs/text"},
+          "from": {"type": "integer", "minimum": 2},
+          "to": {"type": ["integer", "null"], "minimum": 2}
+        }
+      }
+    },
+    "tiers": {
+      "description": "Plain-words meaning of each confidence tier (methodology §6).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["A", "B", "C"],
+      "properties": {
+        "A": {"$ref": "#/$defs/text"},
+        "B": {"$ref": "#/$defs/text"},
+        "C": {"$ref": "#/$defs/text"}
+      }
+    },
+    "sources": {
+      "description": "Source credits; every font's sources object has one entry per source listed here.",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "name",
+          "group",
+          "survey",
+          "measures",
+          "url",
+          "license",
+          "data_date",
+          "stale",
+          "publish_rank"
+        ],
+        "properties": {
+          "id": {"$ref": "#/$defs/token"},
+          "name": {"$ref": "#/$defs/text"},
+          "group": {
+            "description": "Independence group for the two-group gate (methodology §6).",
+            "enum": [
+              "google",
+              "fot",
+              "http_archive",
+              "npm_registry",
+              "jsdelivr",
+              "homebrew",
+              "arch",
+              "debian",
+              "github_counters",
+              "flutter"
+            ]
+          },
+          "survey": {"enum": ["desktop", "project"]},
+          "measures": {"$ref": "#/$defs/text"},
+          "url": {"$ref": "#/$defs/https_url"},
+          "license": {
+            "description": "The source's data license or terms, as the credits show it.",
+            "$ref": "#/$defs/text"
+          },
+          "data_date": {"$ref": "#/$defs/date"},
+          "stale": {"type": "boolean"},
+          "publish_rank": {
+            "description": "Whether the terms ruling lets the page show each font's rank in this source. False means every rank_in_source for it is null.",
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "systems": {
+      "description": "Systems named by preinstalled_on and pulled_in_by. Filters hide by os.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "label", "os"],
+        "properties": {
+          "id": {"$ref": "#/$defs/token"},
+          "label": {"$ref": "#/$defs/text"},
+          "os": {"enum": ["windows", "macos", "linux", "android"]}
+        }
+      }
+    },
+    "license_classes": {
+      "description": "License-class filter groups (D3); each font's license.class is one of these ids.",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "label"],
+        "properties": {
+          "id": {"$ref": "#/$defs/token"},
+          "label": {"$ref": "#/$defs/text"}
+        }
+      }
+    },
+    "fonts": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/font"}
+    }
+  },
+  "$defs": {
+    "date": {
+      "type": "string",
+      "not": {"pattern": "[\\u0000-\\u001f\\u007f]"},
+      "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$"
+    },
+    "sha256": {
+      "type": "string",
+      "not": {"pattern": "[\\u0000-\\u001f\\u007f]"},
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "https_url": {
+      "type": "string",
+      "maxLength": 2048,
+      "not": {"pattern": "[\\u0000-\\u001f\\u007f]"},
+      "pattern": "^https://[^\\s\"<>]+$"
+    },
+    "id": {
+      "type": "string",
+      "maxLength": 80,
+      "not": {"pattern": "[\\u0000-\\u001f\\u007f]"},
+      "pattern": "^[a-z0-9-]+$"
+    },
+    "token": {
+      "type": "string",
+      "maxLength": 64,
+      "not": {"pattern": "[\\u0000-\\u001f\\u007f]"},
+      "pattern": "^[a-z0-9][a-z0-9_-]*$"
+    },
+    "text": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 500,
+      "not": {"pattern": "[\\u0000-\\u001f\\u007f]"},
+      "pattern": "^\\S(.*\\S)?$"
+    },
+    "name": {
+      "description": "A family or alias name: one line, no leading or trailing space.",
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200,
+      "not": {"pattern": "[\\u0000-\\u001f\\u007f]"},
+      "pattern": "^\\S(.*\\S)?$"
+    },
+    "rank_key": {
+      "description": "Versioned rank keys (methodology §7).",
+      "enum": [
+        "overall",
+        "desktop_chosen",
+        "desktop_installed",
+        "project",
+        "coding",
+        "dev_apps",
+        "rising"
+      ]
+    },
+    "link": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["url"],
+      "properties": {
+        "url": {"$ref": "#/$defs/https_url"},
+        "label": {
+          "description": "Overrides the destination name the page derives from the host.",
+          "$ref": "#/$defs/text"
+        }
+      }
+    },
+    "rank_entry": {
+      "description": "A font's place in one rank. Ranked: an exact rank (1-100) or a band, plus order, tier and range. Unranked: every placement field null and a reason.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["rank", "band", "order", "tier", "range", "gate_held", "unranked"],
+      "properties": {
+        "rank": {"type": ["integer", "null"], "minimum": 1, "maximum": 100},
+        "band": {
+          "description": "A bands[].label, for fonts past the exact top 100.",
+          "type": ["string", "null"],
+          "minLength": 1
+        },
+        "order": {
+          "description": "Exact position in the rank, also inside a band.",
+          "type": ["integer", "null"],
+          "minimum": 1
+        },
+        "tier": {"enum": ["A", "B", "C", null]},
+        "range": {
+          "description": "The 5-95% rank range [low, high].",
+          "oneOf": [
+            {"type": "null"},
+            {
+              "type": "array",
+              "minItems": 2,
+              "prefixItems": [
+                {"type": "integer", "minimum": 1},
+                {"type": "integer", "minimum": 1}
+              ],
+              "items": false
+            }
+          ]
+        },
+        "gate_held": {
+          "description": "The two-group evidence gate held the font out of the top 100.",
+          "type": "boolean"
+        },
+        "unranked": {
+          "enum": ["no_deliberate_evidence", "no_evidence", "too_new", null]
+        }
+      },
+      "if": {"properties": {"unranked": {"type": "string"}}},
+      "then": {
+        "properties": {
+          "rank": {"const": null},
+          "band": {"const": null},
+          "order": {"const": null},
+          "tier": {"const": null},
+          "range": {"const": null},
+          "gate_held": {"const": false}
+        }
+      },
+      "else": {
+        "properties": {
+          "order": {"type": "integer"},
+          "tier": {"type": "string"},
+          "range": {"type": "array"}
+        },
+        "oneOf": [
+          {
+            "properties": {
+              "rank": {"type": "integer"},
+              "band": {"const": null},
+              "gate_held": {"const": false}
+            }
+          },
+          {
+            "properties": {
+              "rank": {"const": null},
+              "band": {"type": "string"}
+            }
+          }
+        ]
+      }
+    },
+    "source_entry": {
+      "description": "One font in one source. abstains_in lists the views where a Linux source leaves the font out (never desktop_installed).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state", "rank_in_source", "reason", "abstains_in"],
+      "properties": {
+        "state": {"enum": ["observed", "censored", "not_covered", "too_new"]},
+        "rank_in_source": {"type": ["integer", "null"], "minimum": 1},
+        "reason": {
+          "enum": [
+            null,
+            "below_floor",
+            "no_value",
+            "no_package",
+            "outside_frame",
+            "merged_into_parent"
+          ]
+        },
+        "abstains_in": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/rank_key"}
+        }
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"state": {"const": "observed"}}},
+          "then": {"properties": {"reason": {"const": null}}},
+          "else": {"properties": {"rank_in_source": {"const": null}}}
+        },
+        {
+          "if": {"properties": {"state": {"const": "censored"}}},
+          "then": {"properties": {"reason": {"enum": ["below_floor", "no_value"]}}}
+        },
+        {
+          "if": {"properties": {"state": {"const": "not_covered"}}},
+          "then": {
+            "properties": {
+              "reason": {"enum": ["no_package", "outside_frame", "merged_into_parent"]}
+            }
+          }
+        },
+        {
+          "if": {"properties": {"state": {"enum": ["not_covered", "too_new"]}}},
+          "then": {"properties": {"abstains_in": {"maxItems": 0}}}
+        },
+        {
+          "if": {"properties": {"state": {"const": "too_new"}}},
+          "then": {"properties": {"reason": {"const": null}}}
+        }
+      ]
+    },
+    "font": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "family",
+        "category",
+        "is_monospace",
+        "formats",
+        "latin",
+        "license",
+        "preview_ok",
+        "preview",
+        "font_file",
+        "links",
+        "preinstalled_on",
+        "pulled_in_by",
+        "aliases",
+        "first_seen",
+        "flags",
+        "ranks",
+        "sources"
+      ],
+      "properties": {
+        "id": {"$ref": "#/$defs/id"},
+        "family": {"$ref": "#/$defs/name"},
+        "category": {"enum": ["sans-serif", "serif", "display", "handwriting", "monospace"]},
+        "is_monospace": {"type": "boolean"},
+        "formats": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["variable", "static"],
+          "properties": {
+            "variable": {"type": "boolean"},
+            "static": {"type": "boolean"}
+          },
+          "not": {
+            "properties": {
+              "variable": {"const": false},
+              "static": {"const": false}
+            }
+          }
+        },
+        "latin": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["coverage", "basis"],
+          "properties": {
+            "coverage": {
+              "description": "basic means basic Latin only: the 'limited accents' badge.",
+              "enum": ["basic", "extended"]
+            },
+            "basis": {
+              "description": "How the font passed the Latin gate (D4).",
+              "enum": ["gf_metadata", "owner_allowlist", "glyph_test"]
+            }
+          }
+        },
+        "license": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "spdx",
+            "name",
+            "class",
+            "redistributable",
+            "attribution_required",
+            "attribution",
+            "text_url"
+          ],
+          "properties": {
+            "spdx": {
+              "type": "string",
+              "maxLength": 200,
+              "not": {"pattern": "[\\u0000-\\u001f\\u007f]"},
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9.+:() -]*$"
+            },
+            "name": {"$ref": "#/$defs/text"},
+            "class": {"$ref": "#/$defs/token"},
+            "redistributable": {"type": "boolean"},
+            "attribution_required": {"type": "boolean"},
+            "attribution": {
+              "description": "What to credit, when the license requires it.",
+              "oneOf": [{"type": "null"}, {"$ref": "#/$defs/text"}]
+            },
+            "text_url": {"$ref": "#/$defs/https_url"}
+          },
+          "if": {"properties": {"attribution_required": {"const": true}}},
+          "then": {"properties": {"attribution": {"type": "string"}}},
+          "else": {"properties": {"attribution": {"const": null}}}
+        },
+        "preview_ok": {
+          "description": "The license lets the site host previews (D3: redistributable fonts only).",
+          "type": "boolean"
+        },
+        "preview": {
+          "oneOf": [
+            {"type": "null"},
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["path", "sha256"],
+              "properties": {
+                "path": {
+                  "description": "specimens/<id>.svg, relative to the directory holding this file.",
+                  "type": "string",
+                  "not": {"pattern": "[\\u0000-\\u001f\\u007f]"},
+                  "pattern": "^specimens/[a-z0-9-]+\\.svg$"
+                },
+                "sha256": {"$ref": "#/$defs/sha256"}
+              }
+            }
+          ]
+        },
+        "font_file": {
+          "description": "The unchanged upstream file 'Type your own text' serves. The build uses it; the page never links it.",
+          "oneOf": [
+            {"type": "null"},
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["url", "sha256", "size", "format"],
+              "properties": {
+                "url": {"$ref": "#/$defs/https_url"},
+                "sha256": {"$ref": "#/$defs/sha256"},
+                "size": {"type": "integer", "minimum": 1, "maximum": 20000000},
+                "format": {"enum": ["ttf", "otf", "woff2", "woff"]}
+              }
+            }
+          ]
+        },
+        "links": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["primary", "designer"],
+          "properties": {
+            "primary": {"$ref": "#/$defs/link"},
+            "designer": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/link"}]}
+          }
+        },
+        "preinstalled_on": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["system"],
+            "properties": {"system": {"$ref": "#/$defs/token"}}
+          }
+        },
+        "pulled_in_by": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["system", "package"],
+            "properties": {
+              "system": {"$ref": "#/$defs/token"},
+              "package": {
+                "type": "string",
+                "maxLength": 200,
+                "not": {"pattern": "[\\u0000-\\u001f\\u007f]"},
+                "pattern": "^[A-Za-z0-9][A-Za-z0-9.+_:@/-]*$"
+              }
+            }
+          }
+        },
+        "aliases": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["name", "relation"],
+            "properties": {
+              "name": {"$ref": "#/$defs/name"},
+              "relation": {"enum": ["rename", "build", "postscript"]}
+            }
+          }
+        },
+        "first_seen": {"$ref": "#/$defs/date"},
+        "flags": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "too_new",
+              "specimen_failed",
+              "specimen_name_only",
+              "specimen_hash_mismatch"
+            ]
+          }
+        },
+        "ranks": {
+          "description": "One entry per view whose universe includes the font: every available view, except coding, which holds monospace fonts only.",
+          "type": "object",
+          "required": ["overall"],
+          "propertyNames": {"$ref": "#/$defs/rank_key"},
+          "additionalProperties": {"$ref": "#/$defs/rank_entry"}
+        },
+        "sources": {
+          "description": "One entry per top-level source id.",
+          "type": "object",
+          "minProperties": 1,
+          "propertyNames": {"$ref": "#/$defs/token"},
+          "additionalProperties": {"$ref": "#/$defs/source_entry"}
+        }
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"preview_ok": {"const": false}}},
+          "then": {
+            "properties": {
+              "preview": {"const": null},
+              "font_file": {"const": null}
+            }
+          }
+        },
+        {
+          "if": {"properties": {"preview_ok": {"const": true}}},
+          "then": {
+            "properties": {
+              "license": {"properties": {"redistributable": {"const": true}}}
+            }
+          }
+        },
+        {
+          "if": {"properties": {"is_monospace": {"const": false}}},
+          "then": {"properties": {"ranks": {"not": {"required": ["coding"]}}}}
+        }
+      ]
+    }
+  }
+}

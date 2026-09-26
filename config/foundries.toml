@@ -1,0 +1,22 @@
+# Families from foundries outside the big directories (methodology §2
+# universe; gate M12 (rec): a hand list, seeded once from the foundry sites).
+# SKELETON.
+#
+# Filled in wave 1 by agent I3: League of Moveable Type, Velvetyne,
+# Collletttivo, Open Foundry and Roundo. The collector u/foundries reads it and
+# HEAD-checks every URL. Loaded strictly by tff_catalog.config into
+# config_model.FoundriesConfig: unknown or missing keys fail.
+#
+# [foundries.velvetyne]             # foundry id
+# name = "Velvetyne"
+# url = "https://velvetyne.fr"
+#
+# [[foundries.velvetyne.families]]
+# name = "Example Sans"
+# url = "https://velvetyne.fr/fonts/example-sans/"
+# license = "OFL-1.1"               # as the foundry states it; L1 normalises it
+# repository = ""                   # optional
+
+schema = 1
+
+[foundries]

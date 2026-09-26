@@ -27,7 +27,7 @@ CI runs the lint, the tests and a secret scan (gitleaks) on every pull request. 
 ## Licenses
 
 - **Code:** MIT. See [LICENSE](LICENSE).
-- **Catalog data** (`build/*.json` and `data/`): CC BY-SA 4.0. The owner made it final on 2026-09-25 with the terms rulings T1–T5 (Milestone 1, step 3). See [LICENSE-DATA](LICENSE-DATA).
+- **Catalog data** (`build/*.json`, `build/*.md` and `data/`, except files with their own notice; the specimen images in `build/specimens/` follow each font's license): CC BY-SA 4.0. The owner made it final on 2026-09-25 with the terms rulings T1–T5 (Milestone 1, step 3). See [LICENSE-DATA](LICENSE-DATA).
 - **Fonts** are not part of this project's licenses. Each font keeps its own.
 
 ## Source credits

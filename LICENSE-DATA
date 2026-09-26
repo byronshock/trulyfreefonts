@@ -13,13 +13,19 @@ What this license covers
 
 - The catalog data files build/*.json, for example build/catalog.json,
   build/catalog-site.json and build/names.json.
+- The catalog reports build/*.md, for example build/review.md and
+  build/unmatched.md.
 - Everything under data/, for example data/aliases.csv and the owner's rulings
-  in data/reviews/, except files that carry their own license notice.
+  in data/reviews/, except files that carry their own license notice or sit
+  beside a NOTICE or LICENSE file (such as the Apache-2.0 glyph sets in
+  data/glyphsets/).
 
 It does not cover:
 
 - the code, which is under the MIT License (see LICENSE);
 - the fonts, each of which keeps its own license;
+- the specimen images build/specimens/*.svg, which are sample text drawn with
+  each font's own outlines and follow that font's license;
 - the upstream data we collect, which stays under its publisher's terms (see
   "Source credits" in README.md).
 

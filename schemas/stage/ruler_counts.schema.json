@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://trulyfreefonts.com/schemas/stage/ruler_counts/1",
+  "title": "Ruler counts",
+  "description": "build/stage/ruler_counts.json from stage 'correct' (corrections.ruler_counts): {family id: Homebrew 365-day installs after the gates, alias sums and credits, with no floor}. A family with a cask but no analytics row has 0. Stage 'rank' builds z_R from it (methodology §3, design-m1 §6).",
+  "type": "object",
+  "propertyNames": {
+    "type": "string",
+    "maxLength": 80,
+    "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+  },
+  "additionalProperties": {
+    "type": "number",
+    "minimum": 0
+  }
+}

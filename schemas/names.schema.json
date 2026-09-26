@@ -1,0 +1,188 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://trulyfreefonts.com/schemas/names/0.1.0-draft",
+  "title": "names.json",
+  "description": "Names and aliases of every eligible family in the universe, not only the catalog, plus names known to be ineligible (milestone-1 step 15, for Milestone 3's matching). Draft v0.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "families",
+    "ineligible",
+    "run",
+    "schema_version"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "0.1.0-draft"
+    },
+    "run": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "date",
+        "method_version"
+      ],
+      "properties": {
+        "date": {
+          "$ref": "#/$defs/date"
+        },
+        "method_version": {
+          "$ref": "#/$defs/date"
+        }
+      }
+    },
+    "families": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "distinct_from",
+          "family",
+          "id",
+          "in_catalog",
+          "names"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/id"
+          },
+          "family": {
+            "$ref": "#/$defs/name"
+          },
+          "superfamily_id": {
+            "description": "The superfamily from data/superfamilies.csv, or null.",
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/$defs/id"
+              }
+            ]
+          },
+          "in_catalog": {
+            "type": "boolean"
+          },
+          "names": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "name",
+                "relation"
+              ],
+              "properties": {
+                "name": {
+                  "$ref": "#/$defs/name"
+                },
+                "relation": {
+                  "enum": [
+                    "rename",
+                    "build",
+                    "package",
+                    "postscript",
+                    "bundle",
+                    "sibling",
+                    "related"
+                  ]
+                },
+                "detail": {
+                  "enum": [
+                    "",
+                    "cjk",
+                    "nerd",
+                    "nf",
+                    "nfm",
+                    "nfp",
+                    "nl",
+                    "opsz",
+                    "powerline",
+                    "propo",
+                    "static",
+                    "variable"
+                  ]
+                }
+              },
+              "description": "A name that refers to this family. related and sibling names are never owned: matching an installed font by one of them never marks this family as owned (M3-D5); a sibling is a width sibling folded into the family (D2 fold). detail is the build subtype (aliases.BUILD_DETAILS; empty for a plain build) and appears exactly on builds.",
+              "if": {
+                "properties": {
+                  "relation": {
+                    "const": "build"
+                  }
+                }
+              },
+              "then": {
+                "required": [
+                  "detail"
+                ]
+              },
+              "else": {
+                "not": {
+                  "required": [
+                    "detail"
+                  ]
+                }
+              }
+            }
+          },
+          "distinct_from": {
+            "description": "Families this one must never be confused with (sibling blocks).",
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "$ref": "#/$defs/id"
+            }
+          }
+        }
+      }
+    },
+    "ineligible": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "reason"
+        ],
+        "properties": {
+          "name": {
+            "$ref": "#/$defs/name"
+          },
+          "reason": {
+            "enum": [
+              "proprietary",
+              "itf",
+              "cjk",
+              "icon",
+              "generic",
+              "system",
+              "license",
+              "latin"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "date": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$"
+    },
+    "id": {
+      "type": "string",
+      "maxLength": 80,
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200,
+      "pattern": "^\\S(.*\\S)?$"
+    }
+  }
+}

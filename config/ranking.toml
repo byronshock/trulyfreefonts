@@ -1,0 +1,404 @@
+# Ranking parameters (docs/ranking-methodology.md, §5 tables and §8).
+#
+# Every key is required and unknown keys are rejected, so a typo fails loudly.
+# `uv run tff-catalog config` prints the effective values and, on its last
+# line, their sha256.
+#
+# Owner-gate answers from the Milestone 1 design are built in at the
+# recommended option and marked "# gate <id> (rec)". Each lives in one value,
+# so a different answer is a one-line change. The owner's rulings of
+# 2026-09-25 (data/reviews/terms/ and method/) took the recommended option for
+# T1-T5 and M1-M12 except M9, which is (b): see [project_group_shares].
+#
+# Units: shares are fractions (0.003 = 0.3%). `rate` says what `floor` and
+# `censor_below` are measured in. Series names are the `Observation.series`
+# the collector emits; "YYYY-MM" and "YYYY-Www" stand for monthly and weekly
+# series.
+
+schema = 1
+
+[engine]
+kappa = 0.2                     # D14: shrinkage strength κ
+mu0 = 0.0                       # shrinkage target: the median eligible font
+ruler = "homebrew"              # D5: engine source every other source is equated to
+alt_ruler = "jsdelivr"          # D5: monthly cross-check rerun with Fontsource as the ruler
+overlap_full = 50               # overlap with the ruler that earns full weight
+overlap_off = 15                # below this overlap the source is switched off
+top100_min_groups = 2           # D14: independence groups needed for a top-100 place
+min_observed_terms = 1          # "ranked at all"
+github_homebrew_same_group = "cask_asset"  # gate M5 (rec): GitHub counts join the homebrew group when the cask's url is that repo's asset; "never" keeps them apart
+
+[engine.guard]                  # outlier guard (§4)
+gap = 1.5                       # gate M1 (rec): keep the guard; (b) is gap = 1.6
+min_terms = 3                   # gate M1 (rec); (c) is min_terms = 4
+factor = 0.5                    # weight multiplier for the outlying term
+
+[corrections]
+min_exposure_days = 60          # "too new" under 60 days on a channel, counted from the data date
+nerd_credit = 1.0               # D7
+cjk_build_credit = 1.0          # D7; a build that is both NF and CN gets the smaller credit
+bundle_credit = 0.5             # D2 default: each bundle member gets half credit and a "bundle-only" flag
+bundle_mode = "fixed"           # D2 default: "fixed" (bundle_credit each) or "split" (1/n each)
+width_siblings = "separate"     # D2 default: Barlow Condensed is its own family; "fold" merges it
+dependency_abstain = 0.5        # D8: top reverse dependency share at which a Linux source abstains
+dependency_review = 0.35        # gate M8 (rec): shares from here up to dependency_abstain are flagged
+dependency_rule = "top"         # gate M8 (rec): the top single dependent; "sum" adds all dependents
+dependency_alternatives = "first"  # gate M8 (rec): an `a | b` group credits its first alternative
+
+# --- Engine sources -----------------------------------------------------------
+# Engine sources are not collectors: each maps to one collector plus a selector.
+
+[sources.homebrew]              # Homebrew cask installs, 365 days (macOS)
+collector = "homebrew_analytics"
+group = "homebrew"
+survey = "desktop"
+enabled = true
+linux = false
+publish_raw = true              # gate T1 (rec)
+series = "365d"
+counting = "window"
+exposure = "add_date"
+rate = "per_year"
+floor = 20.0                    # bulk-install floor, subtracted
+censor_below = 60.0
+nerd_floor = "p10"              # gate M3 (rec): Nerd casks get a separate per-run floor, the 10th percentile of Nerd casks (about 2,150/yr); "flat" keeps floor
+nerd_floor_quantile = 0.10
+
+[sources.arch]                  # Arch pkgstats, share of systems
+collector = "pkgstats"
+group = "arch"
+survey = "desktop"
+enabled = true
+linux = true
+publish_raw = true              # gate T1 (rec)
+series = "YYYY-MM"
+counting = "monthly_mean_share" # mean of monthly shares: the sample doubled in a year
+exposure = "first_nonzero_month"
+rate = "share"
+floor = 0.0
+censor_below = 0.003            # 0.3%
+months = 12                     # complete months only
+nerd_group_floor = "tenured_p10"  # gate M4 (rec): p10 of members in the nerd-fonts group 6+ months; newer members not floored; "flat" uses nerd_group_flat_floor
+nerd_group_floor_quantile = 0.10
+nerd_group_tenure_months = 6
+nerd_group_flat_floor = 0.056   # the methodology's flat 5.6%, used only when nerd_group_floor = "flat"
+
+[sources.github]                # GitHub release downloads, main-channel repos only
+collector = "github_releases"
+group = "github_counters"
+survey = "desktop"
+enabled = true
+linux = false
+publish_raw = true              # gate T1 (rec)
+series = "lifetime"
+counting = "snapshot_delta"     # lifetime ÷ days first; then differences between snapshots, up to 12 months
+exposure = "asset_created"
+rate = "per_year"
+floor = 0.0
+censor_below = 0.0
+release_history = "all"         # gate M2 (rec): all releases of main-channel repos; "latest24" or "24months" otherwise
+
+[sources.nerd]                  # Nerd Fonts release downloads, credited to the original font
+collector = "nerd_releases"
+group = "github_counters"
+survey = "desktop"
+enabled = true
+linux = false
+publish_raw = true              # gate T1 (rec)
+series = "lifetime"
+counting = "snapshot_delta"
+exposure = "asset_created"
+rate = "per_year"
+floor = 0.0
+censor_below = 0.0
+floor_quantile = 0.10           # subtract the 10th-percentile floor of the deltas
+exclude_assets = ["FontPatcher", "NerdFontsSymbolsOnly", "SHA-256.txt"]
+
+[sources.debian]                # Debian popcon installs
+collector = "debian"
+group = "debian"
+survey = "desktop"
+enabled = true
+linux = true
+publish_raw = true              # gate T1 (rec)
+series = "inst"
+counting = "current"
+exposure = "none"               # design gap G3: no add date, treated as covered
+rate = "count"
+floor = 0.0
+censor_below = 100.0
+
+[sources.fot]                   # Fonts Over Time: homepages using the font
+collector = "fot"
+group = "fot"
+survey = "project"
+enabled = true                  # gate T4 (rec): used at phase-in weight, with credit, ranks only
+linux = false
+publish_raw = false             # gate T4 (rec): ranks only until the author grants a license
+series = "YYYY-Www"
+counting = "weekly_mean"        # weekly snapshots averaged over the month
+exposure = "data_date"
+rate = "count"
+floor = 0.0
+censor_below = 3.0              # under 3 sites is censored
+phase_in_weight = 0.10          # weight until phase_in_snapshots weekly snapshots exist
+phase_in_snapshots = 8
+ewma_lambda = 0.5               # §6 stability smoothing
+startup_cap = 0.25              # D11 default: startups capped at 25% of the weight
+methods = ["browser", "static"]
+dominant_share = 0.05           # a family also counts at 5% or more of the page's text
+
+[sources.almanac]               # Web Almanac 2025: pages declaring the font
+collector = "almanac"
+group = "http_archive"
+survey = "project"
+enabled = true
+linux = false
+publish_raw = true              # gate T1 (rec)
+series = "pages/mobile"         # the larger crawl (15.4M pages vs 12.2M desktop)
+counting = "yearly"
+exposure = "data_date"          # July 2025 crawl
+rate = "count"
+floor = 0.0
+censor_below = 0.0              # families it doesn't list (top 100) are censored
+tab = "pages"                   # gate M6 (rec): the pages tab is the term; the service tab only flags parent merges
+parent_merge_factor = 0.5       # a parent whose name regex folded in width cuts is flagged and halved
+
+[sources.google]                # Google Fonts views, 1 year
+collector = "gf_stats"
+group = "google"
+survey = "project"
+enabled = true
+linux = false
+publish_raw = false             # gate T2 (rec): ranks and z only, never view counts
+series = "year"
+counting = "window"
+exposure = "date_added"
+rate = "per_year"
+floor = 0.0
+censor_below = 0.0
+fallback = "google_metadata:popularity"  # used only when /metadata/stats fails
+
+[sources.npm_fontsource]        # npm downloads of @fontsource and @fontsource-variable
+collector = "npm"
+group = "npm_registry"
+survey = "project"
+enabled = true
+linux = false
+publish_raw = true              # gate T1 (rec)
+series = "last-year"
+counting = "window"
+exposure = "first_nonzero_day"
+rate = "per_month"
+floor = 0.0
+censor_below = 1000.0
+scopes = ["@fontsource", "@fontsource-variable"]
+
+[sources.ecosystems]            # ecosyste.ms dependent repositories
+collector = "ecosystems"
+group = "npm_registry"
+survey = "project"
+enabled = true
+linux = false
+publish_raw = true              # gate T1 (rec); CC BY-SA 4.0, credited
+series = "dependent_repos"
+counting = "current"
+exposure = "none"
+rate = "count"
+floor = 0.0
+censor_below = 5.0
+scopes = ["@fontsource", "@fontsource-variable"]  # gate M7 (rec): Fontsource only; (b) adds "@expo-google-fonts"
+stale_sync_days = 45            # flag packages whose last_synced_at is older
+
+[sources.jsdelivr]              # jsDelivr hits (Fontsource stats)
+collector = "fontsource_stats"
+group = "jsdelivr"
+survey = "project"
+enabled = true
+linux = false
+publish_raw = true              # gate T1 (rec)
+series = "jsdelivr_monthly"
+counting = "window"
+exposure = "none"
+rate = "per_month"
+floor = 0.0
+censor_below = 10000.0
+
+[sources.npm_expo]              # npm downloads of @expo-google-fonts
+collector = "npm"
+group = "npm_registry"
+survey = "project"
+enabled = true
+linux = false
+publish_raw = true              # gate T1 (rec)
+series = "last-year"
+counting = "window"
+exposure = "first_nonzero_day"
+rate = "per_month"
+floor = 0.0
+censor_below = 1000.0
+scopes = ["@expo-google-fonts"]
+
+[sources.flutter]               # Flutter GoogleFonts.<name> code search
+collector = "flutter"
+group = "flutter"
+survey = "project"
+enabled = false                 # off in the first build (deferred until a token is chosen)
+linux = false
+publish_raw = false
+series = "code_search"
+counting = "current"
+exposure = "none"
+rate = "count"
+floor = 0.0
+censor_below = 0.0
+
+# --- Surveys: each raw source feeds exactly one --------------------------------
+# Chocolatey is not a source: gate T3 (a), owner ruling 2026-09-25, dropped it
+# from v1 (its terms forbid scripted access and republishing).
+
+[surveys.desktop.weights]       # D9 (later OK); W_desktop = the sum of effective weights
+homebrew = 1.0
+arch = 0.75
+github = 0.5
+nerd = 0.3
+debian = 0.25
+
+[surveys.project.weights]       # D10: web 55%, code 30%, apps 15%
+fot = 0.25
+almanac = 0.15
+google = 0.15
+npm_fontsource = 0.15
+ecosystems = 0.10
+jsdelivr = 0.05
+npm_expo = 0.10
+flutter = 0.05
+
+# Gate M9 (b), owner ruling 2026-09-25 (not the recommended option): the project
+# groups keep fixed shares. Within a group, each source gets
+# share * w_eff / (sum of the group's w_eff), with w_eff after phase-in, overlap
+# scaling, stale drops and switched-off sources. Every project source sits in
+# exactly one group.
+[project_group_shares.web]
+share = 0.55
+sources = ["fot", "almanac", "google"]
+
+[project_group_shares.code]
+share = 0.30
+sources = ["npm_fontsource", "ecosystems", "jsdelivr"]
+
+[project_group_shares.apps]
+share = 0.15
+sources = ["npm_expo", "flutter"]
+
+# --- Ranks and views (rank keys are versioned schema constants, §7) ------------
+
+[ranks.overall.mix]             # D12: usage only
+desktop_chosen = 0.5
+project = 0.5
+
+[ranks.desktop_chosen]          # D8: feeds the overall rank
+survey = "desktop"
+abstain = true
+
+[ranks.desktop_installed]       # D8: every install counts
+survey = "desktop"
+abstain = false
+
+[ranks.project]
+survey = "project"
+abstain = true                  # no Linux sources in this survey; kept for symmetry
+
+[ranks.coding]                  # D13: monospace families
+abstain = true
+monospace_only = true
+
+[ranks.coding.weights]
+nerd = 1.0
+homebrew = 1.0
+arch = 0.75
+github = 0.5
+npm_fontsource = 0.5
+
+[ranks.dev_apps]                # D13: what builders choose
+abstain = true
+monospace_only = false
+
+[ranks.dev_apps.weights]        # gate M10 (rec): the project weights, renormalised by the formula; (b) equal weights
+npm_fontsource = 0.15
+ecosystems = 0.10
+npm_expo = 0.10
+flutter = 0.05
+
+[ranks.rising]                  # D13: Rising (beta), from shares, not counts
+min_share = 0.0002              # 0.02%
+min_sources = 2                 # a font rises only when 2 sources agree
+smoothing_months = 3
+new_days = 90                   # fonts under 90 days go to "New" instead
+min_history_months = 3          # design gap G14: published from the third merged refresh
+sources = ["homebrew", "arch", "npm_fontsource", "npm_expo", "google", "jsdelivr"]
+
+[display]
+exact_top = 100                 # D6 (a): exact ranks 1-100 with a tier
+bands = [[101, 250], [251, 500]]  # D6 (a)
+open_band_from = 501            # Milestone 2 design: "501+" for catalog fonts past 500
+categories = ["sans-serif", "serif", "display", "handwriting", "monospace"]  # By category view
+
+# --- Membership, confidence, stability -----------------------------------------
+
+[membership]
+catalog_size = 500              # the overall top 500 ...
+enter = 450                     # ... entered at 450 or better
+leave = 550                     # ... left after leave_runs runs below 550
+leave_runs = 2
+extra_top = 100                 # plus the top 100 of these ranks
+extra_ranks = ["project", "desktop_chosen", "desktop_installed"]
+
+[membership.top100]             # hysteresis of each published top-100 list
+enabled = true                  # gate M11 (rec): enter at 90 or better, leave after 2 runs worse than 110; false means none
+enter = 90
+leave = 110
+leave_runs = 2
+
+[uncertainty]
+runs = 200                      # Dirichlet weight perturbations
+concentration = 20.0            # Dirichlet(20 · w / W)
+quantiles = [0.05, 0.95]
+leave_one_out = true            # plus one run leaving out each source
+seed = 20260925                 # fixed, so ranges are reproducible
+
+[tiers]
+a_min_groups = 2                # tier A: 2+ groups and a range no wider than
+a_min_width = 10                #   max(a_min_width, a_rank_share · rank)
+a_rank_share = 0.3
+b_rank_share = 1.0              # tier B: a range no wider than the rank; else tier C
+
+[stale]
+max_months = 2                  # reuse a failed source's last snapshot for up to 2 months
+
+[crosscheck]
+rrf_k = 60                      # D1: coverage-aware reciprocal-rank fusion
+move_flag = 0.30                # flag moves over 30% under RRF or the Fontsource ruler
+
+[review]                        # §9 flags; they never block the pull request
+rbo_p = 0.98
+rbo_min = 0.9                   # top-500 rank-biased overlap with last month
+spearman_min = 0.9              # a source's month-on-month correlation
+coverage_change_max = 0.10
+share_jump_max = 3.0            # one-source share jumps
+top100_from_below = 250         # top-100 entries that came from below this
+disagreement_top = 50           # top 50 of most chosen or project ...
+disagreement_other = 300        # ... but below 300 in the other
+what_if_factors = [0.5, 2.0]    # each weight halved and doubled
+first_run_move_places = 30      # first run: explain every move of more than 30 places
+
+# --- Gates before ranking ------------------------------------------------------
+
+[latin]                         # D4: non-Google fonts, tested against the GF glyphsets
+kernel_missing_max = 0          # gate L1 (rec, pending measurement): GF_Latin_Kernel fully covered
+core_missing_marks_max = 2      # gate L1 (rec, pending measurement): GF_Latin_Core, at most 2 combining marks missing
+latin_share_min = 0.40          # gate L1 (rec, pending measurement): the methodology text says 0.50
+cjk_codepoints_below = 1000     # fewer than 1,000 CJK code points
+
+[universe]
+foundry_families = "hand"       # gate M12 (rec): a hand list in foundries.toml; "scrape" reads the foundry sites monthly
